@@ -3,15 +3,31 @@ import React from 'react';
 const JSZip = require('jszip');
 
 import './RepubApp.scss';
+import Viewer from './Viewer/Viewer';
 
 
+
+function getXmlDocument (xmlText) {
+	if (window.DOMParser) {
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+		return xmlDoc;
+	} else {
+		// Internet Explorer
+		const xmlDoc = new window.ActiveXObject("Microsoft.XMLDOM");
+		xmlDoc.async = false;
+		xmlDoc.loadXML(xmlText);
+		return xmlDoc;
+	}
+}
 
 export default function RepubApp () {
 	const fref = React.useRef(null);
 	// const [file, setFile] = React.useState(null);
 	const [data, setData] = React.useState({
 		zip: null,
-		content: []
+		paths: [],
+		opfDoc: null
 	});
 
 	function handleUploadChange (e) {
@@ -20,12 +36,22 @@ export default function RepubApp () {
 		if (firstFile.type === "application/epub+zip") {
 			console.log(firstFile);
 			const zip = new JSZip();
-			const content = [];
+			const paths = [];
 			zip.loadAsync(firstFile).then((zip) => {
 				for (const file in zip.files) {
-					content.push(file);
+					paths.push(file);
 				}
-				setData({zip: zip, content: content});
+
+				zip.file('META-INF/container.xml').async('string').then(xmlText => {
+					const cx = getXmlDocument(xmlText);
+					const opfPath = cx.getElementsByTagName('rootfile')[0].getAttribute('full-path');
+					zip.file(opfPath).async('string').then(opfText => {
+						const opfDoc = getXmlDocument(opfText);
+						console.log(opfDoc);
+
+						setData({zip, paths, opfDoc});
+					});
+				});
 			});
 		} else {
 			console.log(`Not EPUB: ${firstFile.type}`);
@@ -48,7 +74,7 @@ export default function RepubApp () {
 
 			<main className="bg-slate-100 min-h-screen">
 				<div className="max-w-xl mx-auto px-4 py-4 space-y-2">
-					{data.content && data.content.map((f, k) => <h4 key={k} className="px-4 py-3 bg-white">{k+1}. {f}</h4>)}
+					{data.zip && <Viewer {...{data}} />}
 				</div>
 			</main>
 
