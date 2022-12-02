@@ -1,8 +1,11 @@
+import path from 'path-browserify';
+
+import {getXmlDocument} from '../Utils';
 
 
 
 export default function Viewer ({data}) {
-	const {zip, paths, opfDoc} = data;
+	const {zip, opfPath, opfDoc} = data;
 	const manifest = opfDoc.getElementsByTagName('manifest')[0];
 	const manifestItems = [...manifest.getElementsByTagName('item')];
 
@@ -14,6 +17,7 @@ export default function Viewer ({data}) {
 		const item = manifestItems.find(x => x.getAttribute('id') === idref);
 		return {
 			id: idref,
+			path: path.join(path.dirname(opfPath), item.getAttribute('href')),
 			href: item.getAttribute('href'),
 			mediaType: item.getAttribute('media-type')
 		};
@@ -27,11 +31,18 @@ export default function Viewer ({data}) {
 			<main>
 				<section>
 					<table className="w-full">
+						<thead>
+							<tr>
+								<td>#</td>
+								<td>ID</td>
+								<td>Path</td>
+							</tr>
+						</thead>
 						<tbody>
 							{chapters.map((c, k) => <tr key={k}>
+								<td>{k+1}</td>
 								<td>{c.id}</td>
-								<td>{c.href}</td>
-								<td>{c.mediaType}</td>
+								<td>{c.path}</td>
 							</tr>)}
 						</tbody>
 					</table>

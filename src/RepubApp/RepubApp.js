@@ -4,22 +4,9 @@ const JSZip = require('jszip');
 
 import './RepubApp.scss';
 import Viewer from './Viewer/Viewer';
+import {getXmlDocument} from './Utils';
 
 
-
-function getXmlDocument (xmlText) {
-	if (window.DOMParser) {
-		const parser = new DOMParser();
-		const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-		return xmlDoc;
-	} else {
-		// Internet Explorer
-		const xmlDoc = new window.ActiveXObject("Microsoft.XMLDOM");
-		xmlDoc.async = false;
-		xmlDoc.loadXML(xmlText);
-		return xmlDoc;
-	}
-}
 
 export default function RepubApp () {
 	const fref = React.useRef(null);
@@ -27,6 +14,7 @@ export default function RepubApp () {
 	const [data, setData] = React.useState({
 		zip: null,
 		paths: [],
+		opfPath: null,
 		opfDoc: null
 	});
 
@@ -47,9 +35,7 @@ export default function RepubApp () {
 					const opfPath = cx.getElementsByTagName('rootfile')[0].getAttribute('full-path');
 					zip.file(opfPath).async('string').then(opfText => {
 						const opfDoc = getXmlDocument(opfText);
-						console.log(opfDoc);
-
-						setData({zip, paths, opfDoc});
+						setData({zip, paths, opfPath, opfDoc});
 					});
 				});
 			});
