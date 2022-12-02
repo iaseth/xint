@@ -1,11 +1,14 @@
+import React from 'react';
 import path from 'path-browserify';
 
+import Chapter from './Chapter';
 import {getXmlDocument} from '../Utils';
 
 
 
 export default function Viewer ({data}) {
 	const {zip, opfPath, opfDoc} = data;
+
 	const manifest = opfDoc.getElementsByTagName('manifest')[0];
 	const manifestItems = [...manifest.getElementsByTagName('item')];
 
@@ -22,6 +25,20 @@ export default function Viewer ({data}) {
 			mediaType: item.getAttribute('media-type')
 		};
 	});
+
+	const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
+	const currentChapter = chapters[currentChapterIndex] || null;
+
+	const [currentChapterDoc, setCurrentChapterDoc] = React.useState(null);
+	React.useEffect(() => {
+		if (currentChapter) {
+			zip.file(currentChapter.path).async('string').then(chapterText => {
+				const chapterDoc = getXmlDocument(chapterText);
+				setCurrentChapterDoc(chapterDoc);
+			});
+		}
+	}, [currentChapterIndex]);
+
 	console.log(manifestItems[0]);
 	console.log(spineItems[0]);
 	console.log(chapters[0]);
@@ -30,22 +47,7 @@ export default function Viewer ({data}) {
 		<article>
 			<main>
 				<section>
-					<table className="w-full">
-						<thead>
-							<tr>
-								<td>#</td>
-								<td>ID</td>
-								<td>Path</td>
-							</tr>
-						</thead>
-						<tbody>
-							{chapters.map((c, k) => <tr key={k}>
-								<td>{k+1}</td>
-								<td>{c.id}</td>
-								<td>{c.path}</td>
-							</tr>)}
-						</tbody>
-					</table>
+					{chapters.map((chapter, k) => <Chapter key={k} {...{zip, chapter}} />)}
 				</section>
 			</main>
 		</article>
