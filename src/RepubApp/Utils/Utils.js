@@ -4,28 +4,6 @@ import path from 'path-browserify';
 
 
 
-export function Header ({fullscreen}) {
-	return (
-		<header className="bg-red-500 text-white py-4" hidden={fullscreen}>
-			<div className="px-4">
-				<h4 className="text-center">Repub</h4>
-			</div>
-		</header>
-	);
-}
-
-
-
-export function Footer ({fullscreen}) {
-	return (
-		<header className="bg-zinc-800 text-white py-10" hidden={fullscreen}>
-			<div className="px-4 py-2">
-				<h4 className="text-center">Created by Ankur Seth</h4>
-			</div>
-		</header>
-	);
-}
-
 export function Button ({text="Button", onClick}) {
 	return (
 		<button className="text-center px-5 py-3 mr-2 bg-blue-500 text-white text-sm font-bold rounded shadow border-2 border-blue-700 hover:bg-blue-700" onClick={onClick}>{text}</button>

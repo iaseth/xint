@@ -3,11 +3,18 @@ import React from 'react';
 import './RepubApp.scss';
 import Viewer from './Viewer/Viewer';
 import HomePage from './HomePage/HomePage';
+import Header from './Header';
+import Footer from './Footer';
 
 
 
 const APPNAME = "repub";
 const LS = window.localStorage;
+
+const DEFAULT_JSON = {
+	books: [],
+	settings: {}
+};
 
 function getBooksFromLS () {
 	const jsonText = LS.getItem(APPNAME);
@@ -32,7 +39,7 @@ export default function RepubApp () {
 
 	function addBookToLS (meta, file) {
 		const jsonText = LS.getItem(APPNAME);
-		const jsonData = jsonText ? JSON.parse(jsonText) : {books: []};
+		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
 
 		const bookIds = jsonData.books.map(b => b.bookId);
 		const maxId = Math.max(0, bookIds);
@@ -45,7 +52,7 @@ export default function RepubApp () {
 
 	function deleteBookFromLS (bookId) {
 		const jsonText = LS.getItem(APPNAME);
-		const jsonData = jsonText ? JSON.parse(jsonText) : {books: []};
+		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
 
 		jsonData.books = jsonData.books.filter(b => b.bookId !== bookId);
 		LS.setItem(APPNAME, JSON.stringify(jsonData));
@@ -67,7 +74,9 @@ export default function RepubApp () {
 
 	return (
 		<div onKeyDown={handleKeyDown}>
+			<Header {...{fullscreen}} />
 			{currentBook ? <Viewer {...{currentBook}} /> : <HomePage {...{fullscreen, books, addBookToLS, deleteBookFromLS}} />}
+			<Footer {...{fullscreen}} />
 		</div>
 	);
 }

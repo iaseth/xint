@@ -2,7 +2,7 @@ import React from 'react';
 
 import BookAdder from './BookAdder';
 import BookList from './BookList/BookList';
-import {Header, Footer, Button} from '../Utils';
+import {Button} from '../Utils';
 
 
 
@@ -25,7 +25,6 @@ export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFro
 
 	return (
 		<div>
-			<Header {...{fullscreen}} />
 
 			<header className="bg-slate-200">
 				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder, addBookToLS}} />}
@@ -43,7 +42,6 @@ export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFro
 				<BookList {...{books, deleteBookFromLS}} />
 			</main>
 
-			<Footer {...{fullscreen}} />
 		</div>
 	);
 }

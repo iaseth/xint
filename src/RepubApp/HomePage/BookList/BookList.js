@@ -11,7 +11,7 @@ export default function BookList ({books, deleteBookFromLS}) {
 				<h4>{books.length} books</h4>
 			</header>
 
-			<main className="py-4 grid gap-x-4 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+			<main className="py-4 grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
 				{books.map(book => <BookBox key={book.bookId} {...{book, deleteBookFromLS}} />)}
 			</main>
 		</section>
