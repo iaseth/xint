@@ -1,16 +1,18 @@
 import React from 'react';
 
-const JSZip = require('jszip');
-
 import './RepubApp.scss';
 import Viewer from './Viewer/Viewer';
-import {getXmlDocument} from './Utils';
+import Home from './Home/Home';
+import {getEbookMeta} from './Utils';
 
 
 
 export default function RepubApp () {
 	const fref = React.useRef(null);
-	// const [file, setFile] = React.useState(null);
+	const [books, setBooks] = React.useState([]);
+	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
+	const currentBook = books[currentBookIndex] || null;
+
 	const [data, setData] = React.useState({
 		zip: null,
 		paths: [],
@@ -18,30 +20,12 @@ export default function RepubApp () {
 		opfDoc: null
 	});
 
-	function handleUploadChange (e) {
-		const firstFile = e.target.files[0] || null;
-
-		if (firstFile.type === "application/epub+zip") {
-			console.log(firstFile);
-			const zip = new JSZip();
-			const paths = [];
-			zip.loadAsync(firstFile).then((zip) => {
-				for (const file in zip.files) {
-					paths.push(file);
-				}
-
-				zip.file('META-INF/container.xml').async('string').then(xmlText => {
-					const cx = getXmlDocument(xmlText);
-					const opfPath = cx.getElementsByTagName('rootfile')[0].getAttribute('full-path');
-					zip.file(opfPath).async('string').then(opfText => {
-						const opfDoc = getXmlDocument(opfText);
-						setData({zip, paths, opfPath, opfDoc});
-					});
-				});
-			});
-		} else {
-			console.log(`Not EPUB: ${firstFile.type}`);
-		}
+	function handleUploadChange (event) {
+		getEbookMeta(event).then(ebookMeta => {
+			if (ebookMeta) {
+				setData(ebookMeta);
+			}
+		});
 	}
 
 	return (
