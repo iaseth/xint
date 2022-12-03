@@ -20,6 +20,7 @@ function getBooksFromLS () {
 }
 
 export default function RepubApp () {
+	const [fullscreen, setFullscreen] = React.useState(false);
 	const [books, setBooks] = React.useState(getBooksFromLS());
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
@@ -51,9 +52,22 @@ export default function RepubApp () {
 		reloadBooks();
 	}
 
-	if (currentBook) {
-		return <Viewer {...{currentBook}} />;
-	} else {
-		return <HomePage {...{books, addBookToLS, deleteBookFromLS}} />;
+	function handleKeyDown (event) {
+		if (event.altKey && event.ctrlKey && event.shiftKey) {
+			if (event.key) {
+				setFullscreen(fullscreen => !fullscreen);
+			}
+		}
 	}
+
+	React.useEffect(() => {
+		window.addEventListener('keydown', handleKeyDown, false);
+		return () => window.removeEventListener('keydown', handleKeyDown, false);
+	});
+
+	return (
+		<div onKeyDown={handleKeyDown}>
+			{currentBook ? <Viewer {...{currentBook}} /> : <HomePage {...{fullscreen, books, addBookToLS, deleteBookFromLS}} />}
+		</div>
+	);
 }

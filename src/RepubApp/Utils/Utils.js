@@ -4,9 +4,9 @@ import path from 'path-browserify';
 
 
 
-export function Header () {
+export function Header ({fullscreen}) {
 	return (
-		<header className="bg-red-500 text-white py-4">
+		<header className="bg-red-500 text-white py-4" hidden={fullscreen}>
 			<div className="px-4">
 				<h4 className="text-center">Repub</h4>
 			</div>
@@ -16,9 +16,9 @@ export function Header () {
 
 
 
-export function Footer () {
+export function Footer ({fullscreen}) {
 	return (
-		<header className="bg-zinc-800 text-white py-10">
+		<header className="bg-zinc-800 text-white py-10" hidden={fullscreen}>
 			<div className="px-4 py-2">
 				<h4 className="text-center">Created by Ankur Seth</h4>
 			</div>

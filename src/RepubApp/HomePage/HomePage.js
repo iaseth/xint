@@ -6,7 +6,7 @@ import {Header, Footer, Button} from '../Utils';
 
 
 
-export default function HomePage ({books, addBookToLS, deleteBookFromLS}) {
+export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFromLS}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -25,7 +25,7 @@ export default function HomePage ({books, addBookToLS, deleteBookFromLS}) {
 
 	return (
 		<div>
-			<Header />
+			<Header {...{fullscreen}} />
 
 			<header className="bg-slate-200">
 				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder, addBookToLS}} />}
@@ -43,7 +43,7 @@ export default function HomePage ({books, addBookToLS, deleteBookFromLS}) {
 				<BookList {...{books, deleteBookFromLS}} />
 			</main>
 
-			<Footer />
+			<Footer {...{fullscreen}} />
 		</div>
 	);
 }
