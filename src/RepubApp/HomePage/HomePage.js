@@ -24,9 +24,13 @@ export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFro
 	}
 
 	return (
-		<div>
+		<div className="min-h-screen bg-slate-100">
 
-			<header className="bg-slate-200">
+			<main>
+				<BookList {...{books, deleteBookFromLS}} />
+			</main>
+
+			<footer className="bg-slate-200">
 				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder, addBookToLS}} />}
 
 				{!showBookAdder && <section className="max-w-lg mx-auto px-4">
@@ -36,11 +40,7 @@ export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFro
 					</header>
 				</section>}
 
-			</header>
-
-			<main className="min-h-screen bg-slate-100">
-				<BookList {...{books, deleteBookFromLS}} />
-			</main>
+			</footer>
 
 		</div>
 	);

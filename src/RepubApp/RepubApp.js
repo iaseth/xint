@@ -1,12 +1,23 @@
 import React from 'react';
 
 import './RepubApp.scss';
-import Viewer from './Viewer/Viewer';
-import HomePage from './HomePage/HomePage';
+
 import Header from './Header';
 import Footer from './Footer';
 
+import HomePage from './HomePage/HomePage';
+import OptionsPage from './OptionsPage/OptionsPage';
+import StorePage from './StorePage/StorePage';
 
+import Viewer from './Viewer/Viewer';
+
+
+
+const REPUB_TABS = [
+	{Component: HomePage, title: "Home", letter: "H"},
+	{Component: StorePage, title: "Store", letter: "S"},
+	{Component: OptionsPage, title: "Options", letter: "O"},
+];
 
 const LS = window.localStorage;
 const IDB = window.indexedDB;
@@ -34,6 +45,10 @@ function getBooksFromLS () {
 }
 
 export default function RepubApp () {
+	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
+	const currentTab = REPUB_TABS[currentTabIndex];
+	const CurrentTabComponent = currentTab.Component;
+
 	const [fullscreen, setFullscreen] = React.useState(false);
 	const [books, setBooks] = React.useState(getBooksFromLS());
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
@@ -120,11 +135,23 @@ export default function RepubApp () {
 		return () => window.removeEventListener('keydown', handleKeyDown, false);
 	});
 
+	function getCurrentTab () {
+		switch (currentTab.title) {
+			case "Store":
+				return <StorePage />;
+			case "Options":
+				return <OptionsPage />;
+			case "Home":
+			default:
+				return <HomePage {...{fullscreen, books, addBookToLS, deleteBookFromLS}} />;
+		}
+	}
+
 
 	return (
 		<div onKeyDown={handleKeyDown}>
-			<Header {...{fullscreen}} />
-			{currentBook ? <Viewer {...{currentBook}} /> : <HomePage {...{fullscreen, books, addBookToLS, deleteBookFromLS}} />}
+			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}} />
+			{currentBook ? <Viewer {...{currentBook}} /> : getCurrentTab()}
 			<Footer {...{fullscreen}} />
 		</div>
 	);
