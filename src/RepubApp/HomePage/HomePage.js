@@ -40,7 +40,7 @@ export default function HomePage ({books, addBookToLS, deleteBookFromLS}) {
 			</header>
 
 			<main className="min-h-screen bg-slate-100">
-				<BookList {...{books}} />
+				<BookList {...{books, deleteBookFromLS}} />
 			</main>
 
 			<Footer />

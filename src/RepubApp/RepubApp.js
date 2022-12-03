@@ -42,7 +42,12 @@ export default function RepubApp () {
 		reloadBooks();
 	}
 
-	function deleteBookFromLS (book) {
+	function deleteBookFromLS (bookId) {
+		const jsonText = LS.getItem(APPNAME);
+		const jsonData = jsonText ? JSON.parse(jsonText) : {books: []};
+
+		jsonData.books = jsonData.books.filter(b => b.bookId !== bookId);
+		LS.setItem(APPNAME, JSON.stringify(jsonData));
 		reloadBooks();
 	}
 
