@@ -2,12 +2,12 @@ import {Button} from '../../Utils';
 
 
 
-export default function BookBox ({book, deleteBookFromLS}) {
+export default function BookBox ({k, book, openViewer, deleteBookFromLS}) {
 	const meta = book.meta;
 
 	return (
-		<article className="bg-white ch:px-4 rounded shadow overflow-hidden cursor-pointer">
-			<header className="bg-blue-300 text-white text-center py-12">
+		<article className="bg-white ch:px-4 rounded shadow overflow-hidden">
+			<header className="bg-blue-300 text-white text-center py-12 cursor-pointer" onClick={() => openViewer(k)}>
 				<h1>Book</h1>
 			</header>
 

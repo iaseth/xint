@@ -6,7 +6,7 @@ import {Button} from '../Utils';
 
 
 
-export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFromLS}) {
+export default function HomePage ({books, openViewer, addBookToLS, deleteBookFromLS}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -24,10 +24,10 @@ export default function HomePage ({fullscreen, books, addBookToLS, deleteBookFro
 	}
 
 	return (
-		<div className="min-h-screen bg-slate-100">
+		<div className="bg-slate-100">
 
-			<main>
-				<BookList {...{books, deleteBookFromLS}} />
+			<main className="min-h-screen">
+				<BookList {...{books, openViewer, deleteBookFromLS}} />
 			</main>
 
 			<footer className="bg-slate-200">

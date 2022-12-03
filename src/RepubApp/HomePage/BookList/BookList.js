@@ -2,7 +2,7 @@ import BookBox from './BookBox';
 
 
 
-export default function BookList ({books, deleteBookFromLS}) {
+export default function BookList ({books, openViewer, deleteBookFromLS}) {
 
 	return (
 		<section className="max-w-5xl mx-auto py-6 px-4">
@@ -12,7 +12,7 @@ export default function BookList ({books, deleteBookFromLS}) {
 			</header>
 
 			<main className="py-4 grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-				{books.map(book => <BookBox key={book.bookId} {...{book, deleteBookFromLS}} />)}
+				{books.map((book, k) => <BookBox key={book.bookId} {...{k, book, openViewer, deleteBookFromLS}} />)}
 			</main>
 		</section>
 	);

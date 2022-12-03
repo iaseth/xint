@@ -5,11 +5,13 @@ export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex
 	const tabItems = REPUB_TABS.filter(tab => !tab.hidden).map((tab, k) => {
 		const current = k === currentTabIndex;
 		let className = "rounded-t";
-		className += current ? " bg-slate-100 text-red-800" : " cursor-pointer";
+		className += current ? " bg-slate-100 text-red-500" : " cursor-pointer";
 
 		return (
 			<div className={className} key={k} onClick={() => setCurrentTabIndex(k)}>
-				<h5 className="px-2 py-5">{tab.title}</h5>
+				<h5 className="px-2 py-5">
+					<span className="border-b-4 border-red-500 pb-1">{tab.title}</span>
+				</h5>
 			</div>
 		);
 	});

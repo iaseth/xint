@@ -46,6 +46,7 @@ export async function getEbookData (firstFile) {
 	const manifestItems = [...manifest.getElementsByTagName('item')];
 	const content = manifestItems.map(item => ({
 		href: item.getAttribute('href'),
+		fullpath: path.join(basepath, item.getAttribute('href')),
 		id: item.getAttribute('id'),
 		mediaType: item.getAttribute('media-type'),
 	}));

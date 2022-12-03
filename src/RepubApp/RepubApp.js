@@ -49,12 +49,14 @@ function getBooksFromLS () {
 export default function RepubApp () {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentTab = REPUB_TABS[currentTabIndex];
-	const CurrentTabComponent = currentTab.Component;
 
 	const [fullscreen, setFullscreen] = React.useState(false);
 	const [books, setBooks] = React.useState(getBooksFromLS());
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
+	const openViewer = (bookIndex) => {
+		setCurrentBookIndex(bookIndex);
+	};
 
 	const [appDB, setAppDB] = React.useState(null);
 	React.useEffect(() => {
@@ -149,7 +151,7 @@ export default function RepubApp () {
 				return <OptionsPage />;
 			case "Home":
 			default:
-				return <HomePage {...{fullscreen, books, addBookToLS, deleteBookFromLS}} />;
+				return <HomePage {...{books, openViewer, addBookToLS, deleteBookFromLS}} />;
 		}
 	}
 
@@ -157,7 +159,7 @@ export default function RepubApp () {
 	return (
 		<div onKeyDown={handleKeyDown}>
 			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}} />
-			{currentBook ? <Viewer {...{currentBook}} /> : getCurrentTab()}
+			{currentBook ? <Viewer {...{appDB, currentBook}} /> : getCurrentTab()}
 			<Footer {...{fullscreen}} />
 		</div>
 	);

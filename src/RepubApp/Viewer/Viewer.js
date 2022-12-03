@@ -1,54 +1,47 @@
 import React from 'react';
-import path from 'path-browserify';
+import JSZip from 'jszip';
 
 import Chapter from './Chapter';
 import {getXmlDocument} from '../Utils';
 
 
 
-export default function Viewer ({data}) {
-	const {zip, opfPath, opfDoc} = data;
+export default function Viewer ({appDB, currentBook}) {
+	const {bookId, meta} = currentBook;
+	const [zip, setZip] = React.useState(null);
+	// const {zip, opfPath, opfDoc} = data;
 
-	const manifest = opfDoc.getElementsByTagName('manifest')[0];
-	const manifestItems = [...manifest.getElementsByTagName('item')];
-
-	const spine = opfDoc.getElementsByTagName('spine')[0];
-	const spineItems = [...spine.getElementsByTagName('itemref')];
-
-	const chapters = spineItems.map((itemref, index) => {
-		const idref = itemref.getAttribute('idref');
-		const item = manifestItems.find(x => x.getAttribute('id') === idref);
-		return {
-			index: index,
-			id: idref,
-			path: path.join(path.dirname(opfPath), item.getAttribute('href')),
-			href: item.getAttribute('href'),
-			mediaType: item.getAttribute('media-type')
-		};
-	});
-
+	console.log(currentBook);
+	const [chapters, setChapters] = React.useState(null);
 	const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
-	const currentChapter = chapters[currentChapterIndex] || null;
+	// const currentChapter = currentBook.chapters[currentChapterIndex] || null;
 
 	const [currentChapterDoc, setCurrentChapterDoc] = React.useState(null);
 	React.useEffect(() => {
-		if (currentChapter) {
-			zip.file(currentChapter.path).async('string').then(chapterText => {
-				const chapterDoc = getXmlDocument(chapterText);
-				setCurrentChapterDoc(chapterDoc);
+		const tx = appDB.transaction('epubs', 'readonly');
+		const req = tx.objectStore('epubs').get(bookId);
+		tx.oncomplete = () => {
+			const epub = req.result;
+			const zip = new JSZip();
+			zip.loadAsync(epub.file).then(zip => {
+				setZip(zip);
+				console.log(zip);
 			});
-		}
-	}, [currentChapterIndex]);
+		};
 
-	console.log(manifestItems[0]);
-	console.log(spineItems[0]);
-	console.log(chapters[0]);
+		// if (currentChapter) {
+		// 	zip.file(currentChapter.path).async('string').then(chapterText => {
+		// 		const chapterDoc = getXmlDocument(chapterText);
+		// 		setCurrentChapterDoc(chapterDoc);
+		// 	});
+		// }
+	}, []);
 
 	return (
 		<article>
 			<main>
 				<section className="space-y-4">
-					{chapters.map((chapter, k) => <Chapter key={k} {...{zip, chapter}} />)}
+					{meta.chapters.map((chapter, k) => <h4 key={k}>{chapter.title}</h4>)}
 				</section>
 			</main>
 		</article>
