@@ -8,6 +8,7 @@ import Footer from './Footer';
 import HomePage from './HomePage/HomePage';
 import OptionsPage from './OptionsPage/OptionsPage';
 import StorePage from './StorePage/StorePage';
+import DebugPage from './DebugPage/DebugPage';
 
 import Viewer from './Viewer/Viewer';
 
@@ -17,6 +18,7 @@ const REPUB_TABS = [
 	{Component: HomePage, title: "Home", letter: "H"},
 	{Component: StorePage, title: "Store", letter: "S"},
 	{Component: OptionsPage, title: "Options", letter: "O"},
+	{Component: DebugPage, title: "Debug", letter: "D", hidden: true},
 ];
 
 const LS = window.localStorage;
@@ -124,8 +126,10 @@ export default function RepubApp () {
 
 	function handleKeyDown (event) {
 		if (event.altKey && event.ctrlKey && event.shiftKey) {
-			if (event.key) {
+			if (event.key === "F") {
 				setFullscreen(fullscreen => !fullscreen);
+			} else if (event.key === "D") {
+				setCurrentTabIndex(REPUB_TABS.findIndex(tab => tab.title === "Debug"));
 			}
 		}
 	}
@@ -137,6 +141,8 @@ export default function RepubApp () {
 
 	function getCurrentTab () {
 		switch (currentTab.title) {
+			case "Debug":
+				return <DebugPage />;
 			case "Store":
 				return <StorePage />;
 			case "Options":

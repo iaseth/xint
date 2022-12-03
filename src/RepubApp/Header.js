@@ -2,7 +2,7 @@
 
 
 export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}) {
-	const tabItems = REPUB_TABS.map((tab, k) => {
+	const tabItems = REPUB_TABS.filter(tab => !tab.hidden).map((tab, k) => {
 		const current = k === currentTabIndex;
 		let className = "rounded-t";
 		className += current ? " bg-slate-100 text-red-800" : " cursor-pointer";
