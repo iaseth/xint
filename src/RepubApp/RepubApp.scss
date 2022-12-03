@@ -16,13 +16,13 @@ div { @apply leading-7; }
 table {
 	@apply font-bold text-sm text-slate-800 border-2 border-zinc-500;
 
-	tr > td {
-		@apply px-3 first:text-right;
+	tr > td, tr > th {
+		@apply px-3 text-left;
 	}
 
 	thead tr {
 		@apply bg-zinc-500 text-white;
-		& > td {
+		& > th {
 			@apply py-2;
 		}
 	}

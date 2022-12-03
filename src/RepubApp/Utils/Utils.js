@@ -1,10 +1,44 @@
 import JSZip from 'jszip';
+import _ from 'lodash';
 
 
 
-export async function getEbookMeta (event) {
-	const firstFile = event.target.files[0] || null;
+export function Header () {
+	return (
+		<header className="bg-red-500 text-white py-4">
+			<div className="px-4">
+				<h4 className="text-center">Repub</h4>
+			</div>
+		</header>
+	);
+}
 
+
+
+export function Footer () {
+	return (
+		<header className="bg-zinc-800 text-white py-10">
+			<div className="px-4 py-2">
+				<h4 className="text-center">Created by Ankur Seth</h4>
+			</div>
+		</header>
+	);
+}
+
+export function Button ({text="Button", onClick}) {
+	return (
+		<button className="text-center px-5 py-3 mr-2 bg-blue-500 text-white text-sm font-bold rounded shadow border-2 border-blue-700 hover:bg-blue-700" onClick={onClick}>{text}</button>
+	);
+}
+
+
+
+function getTagContent (doc, tagName, defaultValue="Not Found") {
+	const tag = doc.getElementsByTagName(tagName)[0] || null;
+	return tag ? _.unescape(tag.innerHTML).trim() : defaultValue;
+}
+
+export async function getEbookData (firstFile) {
 	if (firstFile === null) {
 		// console.log(`No file uploaded!`);
 		return null;
@@ -28,7 +62,15 @@ export async function getEbookMeta (event) {
 	const opfText = await zip.file(opfPath).async('string');
 	const opfDoc = getXmlDocument(opfText);
 
-	return {zip, paths, opfPath, opfDoc};
+	const meta = {
+		identifier: getTagContent(opfDoc, "dc:identifier"),
+		title: getTagContent(opfDoc, "dc:title"),
+		author: getTagContent(opfDoc, "dc:creator"),
+		publisher: getTagContent(opfDoc, "dc:publisher"),
+		description: getTagContent(opfDoc, "description"),
+	};
+
+	return {zip, paths, opfPath, opfDoc, meta};
 }
 
 export function getXmlDocument (xmlText) {
