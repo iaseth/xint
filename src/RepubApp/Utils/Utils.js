@@ -12,6 +12,17 @@ export function Button ({text="Button", onClick}) {
 
 
 
+export async function getChapterDocsFromZip (zip, meta) {
+	const chapters = await Promise.all(meta.chapters.map(async chapter => {
+		const xmlText = await zip.file(chapter.fullpath).async('string');
+		const xmlDoc = getXmlDocument(xmlText);
+		return {xmlDoc, ...chapter};
+	}));
+	return chapters;
+}
+
+
+
 function getTagContent (doc, tagName, defaultValue="Not Found") {
 	const tag = doc.getElementsByTagName(tagName)[0] || null;
 	return tag ? _.unescape(tag.innerHTML).trim() : defaultValue;
