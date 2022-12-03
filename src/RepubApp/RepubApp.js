@@ -8,8 +8,15 @@ import Footer from './Footer';
 
 
 
-const APPNAME = "repub";
 const LS = window.localStorage;
+const IDB = window.indexedDB;
+
+const APPNAME = "repubapp";
+const DATABASE_NAME = APPNAME;
+const DATABASE_TABLES = [
+	{name: "epubs", "fields": []},
+	{name: "covers", "fields": []},
+];
 
 const DEFAULT_JSON = {
 	books: [],
@@ -32,6 +39,32 @@ export default function RepubApp () {
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
 
+	const [appDB, setAppDB] = React.useState(null);
+	React.useEffect(() => {
+		const request = IDB.open(DATABASE_NAME, 1);
+		request.onsuccess = (event) => {
+			const db = event.target.result;
+			setAppDB(db);
+		};
+
+		request.onupgradeneeded = (event) => {
+			const db = event.target.result;
+			DATABASE_TABLES.forEach(table => {
+				const store = db.createObjectStore(table.name, {keyPath: 'id'});
+				table.fields.forEach(field => {
+					store.createIndex(field, field, {unique: false});
+				});
+			});
+		};
+
+		return () => {
+			if (appDB) {
+				appDB.close();
+			}
+		};
+	}, []);
+
+
 	function reloadBooks () {
 		setBooks(getBooksFromLS());
 		setCurrentBookIndex(-1);
@@ -47,6 +80,13 @@ export default function RepubApp () {
 
 		jsonData.books.push({bookId, meta});
 		LS.setItem(APPNAME, JSON.stringify(jsonData));
+
+		const tx = appDB.transaction('epubs', 'readwrite');
+		tx.objectStore('epubs').put({id: bookId, file});
+		tx.oncomplete = () => {
+			console.log(`Saved EPUB to database: bookId(${bookId})`);
+		};
+
 		reloadBooks();
 	}
 
@@ -56,8 +96,16 @@ export default function RepubApp () {
 
 		jsonData.books = jsonData.books.filter(b => b.bookId !== bookId);
 		LS.setItem(APPNAME, JSON.stringify(jsonData));
+
+		const tx = appDB.transaction('epubs', 'readwrite');
+		tx.objectStore('epubs').delete(bookId);
+		tx.oncomplete = () => {
+			console.log(`Deleted EPUB from database: bookId(${bookId})`);
+		};
+
 		reloadBooks();
 	}
+
 
 	function handleKeyDown (event) {
 		if (event.altKey && event.ctrlKey && event.shiftKey) {
@@ -71,6 +119,7 @@ export default function RepubApp () {
 		window.addEventListener('keydown', handleKeyDown, false);
 		return () => window.removeEventListener('keydown', handleKeyDown, false);
 	});
+
 
 	return (
 		<div onKeyDown={handleKeyDown}>
