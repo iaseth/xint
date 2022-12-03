@@ -5,7 +5,7 @@ import {getEbookData} from '../Utils';
 
 
 
-export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder}) {
+export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder, addBookToLS}) {
 	const [data, setData] = React.useState({
 		zip: null,
 		paths: [],
@@ -25,6 +25,9 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 	}, []);
 
 	function addBookAndGoBack () {
+		if (data.zip) {
+			addBookToLS(data.meta, currentFile);
+		}
 		clearCurrentFile();
 		hideBookAdder(false);
 	}

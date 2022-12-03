@@ -1,12 +1,12 @@
 import React from 'react';
 
 import BookAdder from './BookAdder';
-import BookList from './BookList';
+import BookList from './BookList/BookList';
 import {Header, Footer, Button} from '../Utils';
 
 
 
-export default function HomePage ({books, setBooks, data, setData}) {
+export default function HomePage ({books, addBookToLS, deleteBookFromLS}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -28,7 +28,7 @@ export default function HomePage ({books, setBooks, data, setData}) {
 			<Header />
 
 			<header className="bg-slate-200">
-				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder}} />}
+				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder, addBookToLS}} />}
 
 				{!showBookAdder && <section className="max-w-lg mx-auto px-4">
 					<header className="py-6">
@@ -40,7 +40,7 @@ export default function HomePage ({books, setBooks, data, setData}) {
 			</header>
 
 			<main className="min-h-screen bg-slate-100">
-				<BookList />
+				<BookList {...{books}} />
 			</main>
 
 			<Footer />

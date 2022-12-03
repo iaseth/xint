@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
 import _ from 'lodash';
+import path from 'path-browserify';
 
 
 
@@ -61,8 +62,26 @@ export async function getEbookData (firstFile) {
 	const opfPath = containerXmlDoc.getElementsByTagName('rootfile')[0].getAttribute('full-path');
 	const opfText = await zip.file(opfPath).async('string');
 	const opfDoc = getXmlDocument(opfText);
+	const basepath = path.dirname(opfPath);
+
+	const manifest = opfDoc.getElementsByTagName('manifest')[0];
+	const manifestItems = [...manifest.getElementsByTagName('item')];
+	const content = manifestItems.map(item => ({
+		href: item.getAttribute('href'),
+		id: item.getAttribute('id'),
+		mediaType: item.getAttribute('media-type'),
+	}));
+
+	const spine = opfDoc.getElementsByTagName('spine')[0];
+	const spineItems = [...spine.getElementsByTagName('itemref')];
+	const chapters = spineItems.map((itemref, index) => {
+		const idref = itemref.getAttribute('idref');
+		const item = content.find(x => x.id === idref);
+		return {index, ...item};
+	});
 
 	const meta = {
+		basepath, content, chapters,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),
