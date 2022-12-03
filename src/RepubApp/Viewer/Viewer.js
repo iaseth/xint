@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import JSZip from 'jszip';
 
 import Chapter from './Chapter';
@@ -14,6 +15,7 @@ export default function Viewer ({appDB, currentBook}) {
 	const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
 	const currentChapter = chapters[currentChapterIndex] || null;
 	const currentChapterDoc = currentChapter?.xmlDoc || null;
+	const currentChapterHtml = currentChapterDoc ? _.unescape(currentChapterDoc.getElementsByTagName('body')[0].innerHTML) : "";
 
 	React.useEffect(() => {
 		const tx = appDB.transaction('epubs', 'readonly');
@@ -33,12 +35,16 @@ export default function Viewer ({appDB, currentBook}) {
 
 	return (
 		<article>
-			<main className="flex">
-				<aside className="odd:ch:bg-slate-200 w-80 max-w-md border-r-2 border-slate-300">
-					{chapters.map((chapter, k) => <h4 key={k} className="px-4 py-3">Chapter {k+1}</h4>)}
+			<main className="grid grid-cols-4 h-screen overflow-hidden ch:h-full">
+				<aside className="border-r-2 border-slate-300 overflow-scroll">
+					<div className="odd:ch:bg-slate-100">
+						{chapters.map((chapter, k) => <h5 key={k} className="px-4 py-4 cursor-pointer" onClick={() => setCurrentChapterIndex(k)}>Chapter {k+1}</h5>)}
+					</div>
 				</aside>
 
-				<main className="grow"></main>
+				<main className="col-span-3 overflow-scroll">
+					<article dangerouslySetInnerHTML={{__html: currentChapterHtml}} className="px-4 py-4 max-w-lg"></article>
+				</main>
 			</main>
 		</article>
 	);

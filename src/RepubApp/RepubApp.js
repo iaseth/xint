@@ -55,6 +55,7 @@ export default function RepubApp () {
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
 	const openViewer = (bookIndex) => {
+		setFullscreen(true);
 		setCurrentBookIndex(bookIndex);
 	};
 
