@@ -17,10 +17,10 @@ export default function Chapter ({zip, chapter}) {
 	}, []);
 
 	return (
-		<article>
-			<header className="px-2 py-2">
-				<h4>{title || "No title"}</h4>
-				<h4>{chapter.path}</h4>
+		<article className="bg-white rounded shadow cursor-pointer">
+			<header className="ch:px-2 ch:py-2 py-1">
+				<h5 className="border-b-2 border-blue-400 text-blue-500">{title || "No title"}</h5>
+				<h5>{chapter.path}</h5>
 			</header>
 		</article>
 	);

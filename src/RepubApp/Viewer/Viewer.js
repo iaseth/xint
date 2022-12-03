@@ -15,10 +15,11 @@ export default function Viewer ({data}) {
 	const spine = opfDoc.getElementsByTagName('spine')[0];
 	const spineItems = [...spine.getElementsByTagName('itemref')];
 
-	const chapters = spineItems.map(itemref => {
+	const chapters = spineItems.map((itemref, index) => {
 		const idref = itemref.getAttribute('idref');
 		const item = manifestItems.find(x => x.getAttribute('id') === idref);
 		return {
+			index: index,
 			id: idref,
 			path: path.join(path.dirname(opfPath), item.getAttribute('href')),
 			href: item.getAttribute('href'),
@@ -46,7 +47,7 @@ export default function Viewer ({data}) {
 	return (
 		<article>
 			<main>
-				<section>
+				<section className="space-y-4">
 					{chapters.map((chapter, k) => <Chapter key={k} {...{zip, chapter}} />)}
 				</section>
 			</main>
