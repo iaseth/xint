@@ -104,7 +104,7 @@ export default function RepubApp () {
 		const tx = appDB.transaction('epubs', 'readwrite');
 		tx.objectStore('epubs').put({id: bookId, file});
 		tx.oncomplete = () => {
-			console.log(`Saved EPUB to database: bookId(${bookId})`);
+			console.log(`Saved EPUB to database: bookId '#${bookId}'`);
 		};
 
 		reloadBooks();
@@ -120,7 +120,7 @@ export default function RepubApp () {
 		const tx = appDB.transaction('epubs', 'readwrite');
 		tx.objectStore('epubs').delete(bookId);
 		tx.oncomplete = () => {
-			console.log(`Deleted EPUB from database: bookId(${bookId})`);
+			console.log(`Deleted EPUB from database: bookId '#${bookId}'`);
 		};
 
 		reloadBooks();

@@ -1,11 +1,23 @@
 import React from 'react';
 import _ from 'lodash';
+import path from 'path-browserify';
 import JSZip from 'jszip';
 
 import Chapter from './Chapter';
 import {getChapterDocsFromZip} from '../Utils';
 
 
+
+function getContentHtml (xmlDoc) {
+	if (xmlDoc) {
+		const body = xmlDoc.getElementsByTagName('body')[0];
+		if (body) {
+			return _.unescape(body.innerHTML);
+		}
+	}
+
+	return "";
+}
 
 export default function Viewer ({appDB, currentBook}) {
 	const {bookId, meta} = currentBook;
@@ -15,7 +27,12 @@ export default function Viewer ({appDB, currentBook}) {
 	const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
 	const currentChapter = chapters[currentChapterIndex] || null;
 	const currentChapterDoc = currentChapter?.xmlDoc || null;
-	const currentChapterHtml = currentChapterDoc ? _.unescape(currentChapterDoc.getElementsByTagName('body')[0].innerHTML) : "";
+	const currentChapterHtml = getContentHtml(currentChapterDoc);
+	// console.log(currentChapterHtml);
+
+	const [imageCount, setImageCount] = React.useState(0);
+	const [loadedImageCount, setLoadedImageCount] = React.useState(0);
+	const loadedAllImages = imageCount === loadedImageCount;
 
 	React.useEffect(() => {
 		const tx = appDB.transaction('epubs', 'readonly');
@@ -33,6 +50,30 @@ export default function Viewer ({appDB, currentBook}) {
 		};
 	}, []);
 
+	React.useEffect(() => {
+		if (currentChapterDoc) {
+			const imgTags = [...currentChapterDoc.getElementsByTagName('img')];
+			setImageCount(imgTags.length);
+			setLoadedImageCount(0);
+
+			imgTags.forEach(imgTag => {
+				const src = imgTag.getAttribute('src');
+				const fullpath = path.join(path.dirname(currentChapter.fullpath), src);
+
+				const file = zip.file(fullpath);
+				if (file) {
+					file.async('blob').then(blob => {
+						const URL = window.URL || window.webkitURL;
+						const imageURL = URL.createObjectURL(blob);
+						imgTag.src = imageURL;
+						setLoadedImageCount(loadedImageCount => loadedImageCount+1);
+						console.log(`Loaded image: ${loadedImageCount}/${imageCount}`);
+					});
+				}
+			});
+		}
+	}, [currentChapterDoc]);
+
 	return (
 		<article>
 			<main className="grid grid-cols-4 h-screen overflow-hidden ch:h-full">
@@ -43,7 +84,7 @@ export default function Viewer ({appDB, currentBook}) {
 				</aside>
 
 				<main className="col-span-3 overflow-scroll">
-					<article dangerouslySetInnerHTML={{__html: currentChapterHtml}} className="px-4 py-4 max-w-lg"></article>
+					{loadedAllImages && <article dangerouslySetInnerHTML={{__html: currentChapterHtml}} className="px-4 py-4 max-w-lg"></article>}
 				</main>
 			</main>
 		</article>
