@@ -13,8 +13,8 @@ export default function TocView ({tocItems, currentSpineId, setCurrentSpineId}) 
 	});
 
 	return (
-		<div className="">
+		<section className="">
 			{toc}
-		</div>
+		</section>
 	);
 }

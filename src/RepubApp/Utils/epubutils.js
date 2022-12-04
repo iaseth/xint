@@ -102,7 +102,8 @@ export async function getEbookData (firstFile) {
 	const coverPath = coverItem ? coverItem.fullpath : null;
 
 	const meta = {
-		basepath, coverPath, manifestItems, spineItems, tocItems,
+		basepath, coverId, coverPath,
+		manifestItems, spineItems, tocItems,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),

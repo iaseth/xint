@@ -14,7 +14,7 @@ p { @apply leading-7; }
 div { @apply leading-7; }
 
 img {
-	@apply max-w-md my-4;
+	@apply max-w-full mx-auto my-4;
 	max-height: 80vh;
 }
 
