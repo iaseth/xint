@@ -13,10 +13,10 @@ function getContentHtml (xmlDoc) {
 	return "";
 }
 
-export default function PageView ({currentChapterDoc}) {
-	const currentChapterHtml = getContentHtml(currentChapterDoc);
+export default function PageView ({currentDoc}) {
+	const currentHtml = getContentHtml(currentDoc);
 
 	return (
-		<article dangerouslySetInnerHTML={{__html: currentChapterHtml}} className="px-4 py-4 max-w-lg"></article>
+		<article dangerouslySetInnerHTML={{__html: currentHtml}} className="px-4 py-4 max-w-lg"></article>
 	);
 }

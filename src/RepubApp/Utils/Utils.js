@@ -12,13 +12,13 @@ export function Button ({text="Button", onClick}) {
 
 
 
-export async function getChapterDocsFromZip (zip, meta) {
-	const chapters = await Promise.all(meta.chapters.map(async chapter => {
+export async function getSpineItemDocsFromZip (zip, meta) {
+	const spineItems = await Promise.all(meta.spineItems.map(async chapter => {
 		const xmlText = await zip.file(chapter.fullpath).async('string');
 		const xmlDoc = getXmlDocument(xmlText);
 		return {xmlDoc, ...chapter};
 	}));
-	return chapters;
+	return spineItems;
 }
 
 
@@ -54,8 +54,8 @@ export async function getEbookData (firstFile) {
 	const basepath = path.dirname(opfPath);
 
 	const manifest = opfDoc.getElementsByTagName('manifest')[0];
-	const manifestItems = [...manifest.getElementsByTagName('item')];
-	const content = manifestItems.map(item => ({
+	const manifestItemTags = [...manifest.getElementsByTagName('item')];
+	const manifestItems = manifestItemTags.map(item => ({
 		href: item.getAttribute('href'),
 		fullpath: path.join(basepath, item.getAttribute('href')),
 		id: item.getAttribute('id'),
@@ -63,15 +63,15 @@ export async function getEbookData (firstFile) {
 	}));
 
 	const spine = opfDoc.getElementsByTagName('spine')[0];
-	const spineItems = [...spine.getElementsByTagName('itemref')];
-	const chapters = spineItems.map((itemref, index) => {
+	const spineItemrefTags = [...spine.getElementsByTagName('itemref')];
+	const spineItems = spineItemrefTags.map((itemref, index) => {
 		const idref = itemref.getAttribute('idref');
-		const item = content.find(x => x.id === idref);
+		const item = manifestItems.find(x => x.id === idref);
 		return {index, ...item};
 	});
 
 	const meta = {
-		basepath, content, chapters,
+		basepath, manifestItems, spineItems,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),
