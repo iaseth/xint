@@ -17,6 +17,6 @@ export default function PageView ({currentDoc}) {
 	const currentHtml = getContentHtml(currentDoc);
 
 	return (
-		<article dangerouslySetInnerHTML={{__html: currentHtml}} className="px-4 py-4 max-w-lg"></article>
+		<article dangerouslySetInnerHTML={{__html: currentHtml}} className="px-4 py-4"></article>
 	);
 }

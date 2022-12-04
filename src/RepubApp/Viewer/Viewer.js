@@ -17,9 +17,15 @@ export default function Viewer ({appDB, currentBook}) {
 
 	const [spineItems, setSpineItems] = React.useState([]);
 	const [currentSpineId, setCurrentSpineId] = React.useState(null);
+	const currentSpineIndex = spineItems.findIndex(x => x.id === currentSpineId);
 	const currentSpineItem = spineItems.find(x => x.id === currentSpineId) || null;
 	const currentDoc = currentSpineItem?.xmlDoc || null;
-	// console.log(currentChapterHtml);
+	function setCurrentSpineIndex (nuSpineIndex) {
+		if (nuSpineIndex > 0 && nuSpineIndex < spineItems.length) {
+			const nuSpineId = spineItems[nuSpineIndex].id;
+			setCurrentSpineId(nuSpineId);
+		}
+	}
 
 	const imgTags = currentDoc ? [...currentDoc.getElementsByTagName('img')] : [];
 	const imageCount = imgTags.length;
@@ -49,6 +55,7 @@ export default function Viewer ({appDB, currentBook}) {
 		// loads images into blobs
 		if (currentDoc) {
 			// yet to load any image
+			setPageNumber(0);
 			setLoadedImageCount(0);
 
 			imgTags.forEach(imgTag => {
@@ -84,6 +91,8 @@ export default function Viewer ({appDB, currentBook}) {
 	const goToPreviousPage = () => {
 		if (pageNumber > 0) {
 			setPageNumber(pageNumber - 1);
+		} else {
+			setCurrentSpineIndex(currentSpineIndex - 1);
 		}
 	};
 	const goToNextPage = () => {
@@ -93,6 +102,9 @@ export default function Viewer ({appDB, currentBook}) {
 		const nuPageNumber = pageNumber + 1;
 		if (nuPageNumber < maxPages) {
 			setPageNumber(nuPageNumber);
+		} else {
+			// go to next iten in spine
+			setCurrentSpineIndex(currentSpineIndex + 1);
 		}
 	};
 
@@ -126,10 +138,14 @@ export default function Viewer ({appDB, currentBook}) {
 					<TocView {...{tocItems, currentSpineId, setCurrentSpineId}} />
 				</aside>
 
-				<main className="col-span-3 h-full overflow-hidden">
+				<main className="col-span-3 h-full max-w-lg overflow-hidden relative">
+
 					<section ref={pageViewRef} className="relative" style={containerStyle}>
 						<PageView {...{currentDoc}} />
 					</section>
+
+					<section className="absolute top-0 w-2/5 h-full cursor-pointer left-0" onClick={() => goToPreviousPage()}></section>
+					<section className="absolute top-0 w-3/5 h-full cursor-pointer right-0" onClick={() => goToNextPage()}></section>
 				</main>
 			</main>
 		</article>
