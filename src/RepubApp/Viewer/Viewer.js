@@ -7,6 +7,7 @@ import {TocView, SpineView, ToolboxView} from './TopScreens';
 import LoadingView from './LoadingView/LoadingView';
 import PageView from './PageView/PageView';
 import ClickScreen from './ClickScreen/ClickScreen';
+import OptionsScreen from './OptionsScreen/OptionsScreen';
 
 import {getSpineItemDocsFromZip} from '../Utils';
 
@@ -171,6 +172,8 @@ export default function Viewer ({appDB, currentBook}) {
 					<section ref={pageViewRef} className="relative" style={containerStyle}>
 						<PageView {...{currentDoc}} />
 					</section>
+
+					{showOptions && <OptionsScreen {...{toggleOptions}} />}
 
 					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, toggleToolbox, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
