@@ -9,7 +9,24 @@ export default function OptionsFooter ({
 	const contentHeight = pageViewRef.current.offsetHeight;
 	const pageCount = Math.ceil(contentHeight / containerHeight);
 
-	const pageDots = [...Array(pageCount)].map((x, k) => {
+	const maxWidth = pageViewRef.current.parentElement.offsetWidth - 32;
+	const dotWidth = 20;
+	const maxDots = Math.floor(maxWidth / dotWidth);
+
+	const pageArray = [...Array(pageCount)].map((x, k) => k);
+	let pageStartIndex = 0;
+	if (pageCount > maxDots) {
+		const maxDotsHalf = Math.floor(maxDots/2);
+		if (pageNumber <= maxDotsHalf) {
+			pageStartIndex = 0;
+		} else if (pageCount - pageNumber < maxDotsHalf) {
+			pageStartIndex = pageCount - maxDots;
+		} else {
+			pageStartIndex = pageNumber - maxDotsHalf;
+		}
+	}
+
+	const pageDots = pageArray.slice(pageStartIndex, pageStartIndex + maxDots).map(k => {
 		const current = k === pageNumber;
 		let className = "p-1 border-2";
 		className += current ? " border-zinc-500 rounded-full" : " border-transparent";
@@ -24,11 +41,11 @@ export default function OptionsFooter ({
 	const chapterDots = tocItems.map((item, k) => {
 		const current = currentSpineId === item.spineId;
 		let className = "p-1 border-2";
-		className += current ? " border-zinc-500 rounded-full" : " border-transparent";
+		className += current ? " border-zinc-500" : " border-transparent";
 
 		return (
 			<div key={k} className={className} onClick={() => setCurrentSpineId(item.spineId)}>
-				<div className="w-2 h-2 rounded-full bg-zinc-500"></div>
+				<div className="w-2 h-2 bg-zinc-500"></div>
 			</div>
 		);
 	});
