@@ -29,6 +29,7 @@ export default function Viewer ({appDB, currentBook}) {
 	const currentSpineIndex = spineItems.findIndex(x => x.id === currentSpineId);
 	const currentSpineItem = spineItems.find(x => x.id === currentSpineId) || null;
 	const currentDoc = currentSpineItem?.xmlDoc || null;
+	// const [readyToRender, setReadyToRender] = React.useState(false);
 
 	const setCurrentSpineIndex = (nuSpineIndex) => {
 		if (nuSpineIndex >= 0 && nuSpineIndex < spineItems.length) {
@@ -163,7 +164,7 @@ export default function Viewer ({appDB, currentBook}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, goToPreviousPage, goToNextPage, goToNextChapter}} />
+					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
 
 				<footer>
@@ -176,7 +177,7 @@ export default function Viewer ({appDB, currentBook}) {
 					</aside>
 
 					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ right: showSpine ? "0" : "-100%" }}>
-						<SpineView {...{toggleSpine}} />
+						<SpineView {...{spineItems, currentSpineId, setCurrentSpineId, toggleSpine}} />
 					</aside>
 				</footer>
 			</main>
