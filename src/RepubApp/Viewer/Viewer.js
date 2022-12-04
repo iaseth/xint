@@ -13,7 +13,7 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 
 
-export default function Viewer ({appDB, currentBook}) {
+export default function Viewer ({appDB, currentBook, goBackHome}) {
 	const {bookId, meta} = currentBook;
 	const {tocItems} = meta;
 	const [zip, setZip] = React.useState(null);
@@ -173,7 +173,7 @@ export default function Viewer ({appDB, currentBook}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					{showOptions && <OptionsScreen {...{toggleOptions}} />}
+					{showOptions && <OptionsScreen {...{toggleOptions, goBackHome}} />}
 
 					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, toggleToolbox, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>

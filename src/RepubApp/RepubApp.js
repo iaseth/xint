@@ -58,6 +58,10 @@ export default function RepubApp () {
 		setFullscreen(true);
 		setCurrentBookIndex(bookIndex);
 	};
+	const goBackHome = () => {
+		setFullscreen(false);
+		setCurrentBookIndex(-1);
+	};
 
 	const [appDB, setAppDB] = React.useState(null);
 	React.useEffect(() => {
@@ -160,7 +164,7 @@ export default function RepubApp () {
 	return (
 		<div onKeyDown={handleKeyDown}>
 			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}} />
-			{currentBook ? <Viewer {...{appDB, currentBook}} /> : getCurrentTab()}
+			{currentBook ? <Viewer {...{appDB, currentBook, goBackHome}} /> : getCurrentTab()}
 			<Footer {...{fullscreen}} />
 		</div>
 	);

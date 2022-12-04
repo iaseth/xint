@@ -12,6 +12,15 @@
 		<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 		<title>Repub</title>
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-KXWL91BM7H"></script>
+		<script type="text/javascript">
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {dataLayer.push(arguments);};
+			if (document.location.hostname.search("epubapp.netlify.app") !== -1) {
+				gtag('js', new Date()); gtag('config', 'G-KXWL91BM7H');
+			}
+		</script>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
