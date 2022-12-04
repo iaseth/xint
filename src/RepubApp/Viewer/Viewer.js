@@ -28,7 +28,9 @@ export default function Viewer ({appDB, currentBook}) {
 	const [currentSpineId, setCurrentSpineId] = React.useState(null);
 	const currentSpineIndex = spineItems.findIndex(x => x.id === currentSpineId);
 	const currentSpineItem = spineItems.find(x => x.id === currentSpineId) || null;
-	const currentDoc = currentSpineItem?.xmlDoc || null;
+	const currentSpineItemDoc = currentSpineItem?.xmlDoc || null;
+	const [currentDoc, setCurrentDoc] = React.useState(null);
+	const currentDocIsOutdated = currentDoc !== currentSpineItemDoc;
 	// const [readyToRender, setReadyToRender] = React.useState(false);
 
 	const setCurrentSpineIndex = (nuSpineIndex) => {
@@ -41,10 +43,18 @@ export default function Viewer ({appDB, currentBook}) {
 	const goToPreviousChapter = () => goToChapterN(currentSpineIndex - 1);
 	const goToNextChapter = () => goToChapterN(currentSpineIndex + 1);
 
-	const imgTags = currentDoc ? [...currentDoc.getElementsByTagName('img')] : [];
+	const imgTags = currentSpineItemDoc ? [...currentSpineItemDoc.getElementsByTagName('img')] : [];
 	const imageCount = imgTags.length;
 	const [loadedImageCount, setLoadedImageCount] = React.useState(0);
 	const loadedAllImages = imageCount === loadedImageCount;
+
+
+	React.useEffect(() => {
+		if (currentDocIsOutdated && loadedAllImages) {
+			setCurrentDoc(currentSpineItemDoc);
+		}
+	}, [currentDocIsOutdated, loadedAllImages]);
+
 
 	React.useEffect(() => {
 		// gets zip from database
@@ -67,7 +77,7 @@ export default function Viewer ({appDB, currentBook}) {
 
 	React.useEffect(() => {
 		// loads images into blobs
-		if (currentDoc) {
+		if (currentSpineItemDoc) {
 			// yet to load any image
 			setShowToc(false);
 			setShowSpine(false);
@@ -150,7 +160,7 @@ export default function Viewer ({appDB, currentBook}) {
 	});
 
 
-	if (!currentDoc || !loadedAllImages) {
+	if (currentDoc === null) {
 		return <LoadingView />;
 	}
 
