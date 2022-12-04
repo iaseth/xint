@@ -1,23 +1,14 @@
 import React from 'react';
-import _ from 'lodash';
 import path from 'path-browserify';
 import JSZip from 'jszip';
 
-import Chapter from './Chapter';
+import TocView from './TocView/TocView';
+import LoadingView from './LoadingView/LoadingView';
+import PageView from './PageView/PageView';
+
 import {getChapterDocsFromZip} from '../Utils';
 
 
-
-function getContentHtml (xmlDoc) {
-	if (xmlDoc) {
-		const body = xmlDoc.getElementsByTagName('body')[0];
-		if (body) {
-			return _.unescape(body.innerHTML);
-		}
-	}
-
-	return "";
-}
 
 export default function Viewer ({appDB, currentBook}) {
 	const {bookId, meta} = currentBook;
@@ -27,7 +18,6 @@ export default function Viewer ({appDB, currentBook}) {
 	const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
 	const currentChapter = chapters[currentChapterIndex] || null;
 	const currentChapterDoc = currentChapter?.xmlDoc || null;
-	const currentChapterHtml = getContentHtml(currentChapterDoc);
 	// console.log(currentChapterHtml);
 
 	const [imageCount, setImageCount] = React.useState(0);
@@ -74,17 +64,19 @@ export default function Viewer ({appDB, currentBook}) {
 		}
 	}, [currentChapterDoc]);
 
+	if (!currentChapterDoc || !loadedAllImages) {
+		return <LoadingView />;
+	}
+
 	return (
 		<article>
 			<main className="grid grid-cols-4 h-screen overflow-hidden ch:h-full">
 				<aside className="border-r-2 border-slate-300 overflow-scroll">
-					<div className="odd:ch:bg-slate-100">
-						{chapters.map((chapter, k) => <h5 key={k} className="px-4 py-4 cursor-pointer" onClick={() => setCurrentChapterIndex(k)}>Chapter {k+1}</h5>)}
-					</div>
+					<TocView {...{chapters, setCurrentChapterIndex}} />
 				</aside>
 
 				<main className="col-span-3 overflow-scroll">
-					{loadedAllImages && <article dangerouslySetInnerHTML={{__html: currentChapterHtml}} className="px-4 py-4 max-w-lg"></article>}
+					<PageView {...{currentChapterDoc}} />
 				</main>
 			</main>
 		</article>
