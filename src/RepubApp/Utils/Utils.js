@@ -23,6 +23,26 @@ export async function getSpineItemDocsFromZip (zip, meta) {
 
 
 
+function getTocItems (navMap, basepath, spineItems) {
+	const navPoints = [...navMap.children].filter(tag => tag.nodeName === 'navPoint');
+	return navPoints.map(navPoint => {
+		const navLabel = navPoint.getElementsByTagName('navLabel')[0] || null;
+		const text = navLabel ? navLabel.getElementsByTagName('text')[0].innerHTML.trim() : "";
+		const src = navPoint.getElementsByTagName('content')[0].getAttribute('src');
+		const fullpath = path.join(basepath, src);
+
+		return {
+			className: navPoint.getAttribute('class'),
+			id: navPoint.getAttribute('id'),
+			playOrder: navPoint.getAttribute('playOrder'),
+			text: text,
+			fullpath: fullpath,
+			spineId: spineItems.find(x => x.fullpath === fullpath).id,
+			chapters: getTocItems(navPoint, basepath, spineItems)
+		};
+	});
+}
+
 function getTagContent (doc, tagName, defaultValue="Not Found") {
 	const tag = doc.getElementsByTagName(tagName)[0] || null;
 	return tag ? _.unescape(tag.innerHTML).trim() : defaultValue;
@@ -70,8 +90,20 @@ export async function getEbookData (firstFile) {
 		return {index, ...item};
 	});
 
+	let tocItems = [];
+	const tocId = spine.getAttribute('toc') || null;
+	const tocItem = manifestItems.find(x => x.id === tocId) || null;
+	if (tocItem) {
+		const tocText = await zip.file(tocItem.fullpath).async('string');
+		const tocDoc = getXmlDocument(tocText);
+
+		const navMap = tocDoc.getElementsByTagName('navMap')[0];
+		const tocBasepath = path.dirname(tocItem.fullpath);
+		tocItems = getTocItems(navMap, tocBasepath, spineItems);
+	}
+
 	const meta = {
-		basepath, manifestItems, spineItems,
+		basepath, manifestItems, spineItems, tocItems,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),

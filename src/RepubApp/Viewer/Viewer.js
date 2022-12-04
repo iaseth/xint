@@ -12,11 +12,12 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 export default function Viewer ({appDB, currentBook}) {
 	const {bookId, meta} = currentBook;
+	const {tocItems} = meta;
 	const [zip, setZip] = React.useState(null);
 
 	const [spineItems, setSpineItems] = React.useState([]);
-	const [spineIndex, setSpineIndex] = React.useState(0);
-	const currentSpineItem = spineItems[spineIndex] || null;
+	const [currentSpineId, setCurrentSpineId] = React.useState(null);
+	const currentSpineItem = spineItems.find(x => x.id === currentSpineId) || null;
 	const currentDoc = currentSpineItem?.xmlDoc || null;
 	// console.log(currentChapterHtml);
 
@@ -35,6 +36,7 @@ export default function Viewer ({appDB, currentBook}) {
 				setZip(zip);
 				getSpineItemDocsFromZip(zip, meta).then(spineItems => {
 					setSpineItems(spineItems);
+					setCurrentSpineId(spineItems[0].id);
 				});
 			});
 		};
@@ -72,7 +74,7 @@ export default function Viewer ({appDB, currentBook}) {
 		<article>
 			<main className="grid grid-cols-4 h-screen overflow-hidden ch:h-full">
 				<aside className="border-r-2 border-slate-300 overflow-y-scroll">
-					<TocView {...{spineItems, setSpineIndex}} />
+					<TocView {...{tocItems, currentSpineId, setCurrentSpineId}} />
 				</aside>
 
 				<main className="col-span-3 overflow-y-scroll">
