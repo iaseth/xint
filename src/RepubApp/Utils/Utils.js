@@ -102,8 +102,13 @@ export async function getEbookData (firstFile) {
 		tocItems = getTocItems(navMap, tocBasepath, spineItems);
 	}
 
+	const coverMeta = [...opfDoc.getElementsByTagName('meta')].find(meta => meta.getAttribute('name') === 'cover');
+	const coverId = coverMeta ? coverMeta.getAttribute('content') : null;
+	const coverItem = manifestItems.find(x => x.id === coverId);
+	const coverPath = coverItem ? coverItem.fullpath : null;
+
 	const meta = {
-		basepath, manifestItems, spineItems, tocItems,
+		basepath, coverPath, manifestItems, spineItems, tocItems,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),

@@ -4,8 +4,8 @@
 export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}) {
 	const tabItems = REPUB_TABS.filter(tab => !tab.hidden).map((tab, k) => {
 		const current = k === currentTabIndex;
-		let className = "rounded-t";
-		className += current ? " bg-slate-100 text-red-500" : " cursor-pointer";
+		let className = "rounded-t duration-300";
+		className += current ? " bg-slate-100 text-red-500" : " cursor-pointer hover:bg-red-600";
 
 		return (
 			<div className={className} key={k} onClick={() => setCurrentTabIndex(k)}>
