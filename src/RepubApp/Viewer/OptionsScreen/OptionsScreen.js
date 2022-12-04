@@ -4,8 +4,9 @@ import OptionsFooter from './OptionsFooter';
 
 
 export default function OptionsScreen ({
+	goBackHome, toggleOptions,
 	pageViewRef, pageNumber, setPageNumber,
-	toggleOptions, goBackHome
+	currentSpineId, setCurrentSpineId, tocItems
 }) {
 
 	return (
@@ -14,7 +15,8 @@ export default function OptionsScreen ({
 
 			<main className="grow border-x-2 border-white" onClick={toggleOptions}></main>
 
-			<OptionsFooter {...{pageViewRef, pageNumber, setPageNumber}} />
+			<OptionsFooter {...{pageViewRef, pageNumber, setPageNumber,
+				currentSpineId, setCurrentSpineId, tocItems}} />
 		</section>
 	);
 }

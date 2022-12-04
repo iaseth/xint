@@ -7,7 +7,7 @@ export default function ClickScreen ({
 }) {
 
 	return (
-		<section className="absolute top-0 left-0 z-20 w-full h-full border-2 border-red-500">
+		<section className="absolute top-0 left-0 z-20 w-full h-full sm:border-x-2 border-zinc-500">
 			<header className="h-1/6 flex">
 				<section className="w-1/3 h-full" onClick={toggleToc}></section>
 				<section className="w-1/3 h-full" onClick={toggleOptions}></section>
