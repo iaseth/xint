@@ -24,6 +24,7 @@ function getTocItems (navMap, basepath, spineItems) {
 		const text = navLabel ? navLabel.getElementsByTagName('text')[0].innerHTML.trim() : "";
 		const src = navPoint.getElementsByTagName('content')[0].getAttribute('src');
 		const fullpath = path.join(basepath, src);
+		const spineItem = spineItems.find(x => x.fullpath === fullpath);
 
 		return {
 			className: navPoint.getAttribute('class'),
@@ -31,7 +32,8 @@ function getTocItems (navMap, basepath, spineItems) {
 			playOrder: navPoint.getAttribute('playOrder'),
 			text: text,
 			fullpath: fullpath,
-			spineId: spineItems.find(x => x.fullpath === fullpath).id,
+			spineId: spineItem.id,
+			size: spineItem.size,
 			chapters: getTocItems(navPoint, basepath, spineItems)
 		};
 	});
@@ -69,12 +71,18 @@ export async function getEbookData (firstFile) {
 
 	const manifest = opfDoc.getElementsByTagName('manifest')[0];
 	const manifestItemTags = [...manifest.getElementsByTagName('item')];
-	const manifestItems = manifestItemTags.map(item => ({
-		href: item.getAttribute('href'),
-		fullpath: path.join(basepath, item.getAttribute('href')),
-		id: item.getAttribute('id'),
-		mediaType: item.getAttribute('media-type'),
-	}));
+	const manifestItems = manifestItemTags.map(item => {
+		const fullpath = path.join(basepath, item.getAttribute('href'));
+		const file = zip.file(fullpath);
+		const size = file ? file._data.uncompressedSize : 0;
+
+		return {
+			fullpath, size,
+			href: item.getAttribute('href'),
+			id: item.getAttribute('id'),
+			mediaType: item.getAttribute('media-type'),
+		};
+	});
 
 	const spine = opfDoc.getElementsByTagName('spine')[0];
 	const spineItemrefTags = [...spine.getElementsByTagName('itemref')];
