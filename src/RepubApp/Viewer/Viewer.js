@@ -21,7 +21,8 @@ export default function Viewer ({appDB, currentBook}) {
 	const currentDoc = currentSpineItem?.xmlDoc || null;
 	// console.log(currentChapterHtml);
 
-	const [imageCount, setImageCount] = React.useState(0);
+	const imgTags = currentDoc ? [...currentDoc.getElementsByTagName('img')] : [];
+	const imageCount = imgTags.length;
 	const [loadedImageCount, setLoadedImageCount] = React.useState(0);
 	const loadedAllImages = imageCount === loadedImageCount;
 
@@ -44,27 +45,27 @@ export default function Viewer ({appDB, currentBook}) {
 
 	React.useEffect(() => {
 		if (currentDoc) {
-			const imgTags = [...currentDoc.getElementsByTagName('img')];
-			setImageCount(imgTags.length);
 			setLoadedImageCount(0);
 
 			imgTags.forEach(imgTag => {
 				const src = imgTag.getAttribute('src');
-				const fullpath = path.join(path.dirname(currentSpineItem.fullpath), src);
-
-				const file = zip.file(fullpath);
-				if (file) {
-					file.async('blob').then(blob => {
-						const URL = window.URL || window.webkitURL;
-						const imageURL = URL.createObjectURL(blob);
-						imgTag.src = imageURL;
-						setLoadedImageCount(loadedImageCount => loadedImageCount+1);
-						console.log(`Loaded image: ${loadedImageCount}/${imageCount}`);
-					});
+				if (src.startsWith('blob:')) {
+					setLoadedImageCount(loadedImageCount => loadedImageCount+1);
+				} else {
+					const fullpath = path.join(path.dirname(currentSpineItem.fullpath), src);
+					const file = zip.file(fullpath);
+					if (file) {
+						file.async('blob').then(blob => {
+							const URL = window.URL || window.webkitURL;
+							const imageURL = URL.createObjectURL(blob);
+							imgTag.src = imageURL;
+							setLoadedImageCount(loadedImageCount => loadedImageCount+1);
+						});
+					}
 				}
 			});
 		}
-	}, [currentDoc]);
+	}, [currentSpineId]);
 
 	if (!currentDoc || !loadedAllImages) {
 		return <LoadingView />;
