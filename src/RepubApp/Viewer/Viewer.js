@@ -20,12 +20,15 @@ export default function Viewer ({appDB, currentBook}) {
 	const currentSpineIndex = spineItems.findIndex(x => x.id === currentSpineId);
 	const currentSpineItem = spineItems.find(x => x.id === currentSpineId) || null;
 	const currentDoc = currentSpineItem?.xmlDoc || null;
-	function setCurrentSpineIndex (nuSpineIndex) {
+
+	const setCurrentSpineIndex = (nuSpineIndex) => {
 		if (nuSpineIndex > 0 && nuSpineIndex < spineItems.length) {
 			const nuSpineId = spineItems[nuSpineIndex].id;
 			setCurrentSpineId(nuSpineId);
 		}
-	}
+	};
+	const goToPreviousChapter = () => setCurrentSpineIndex(currentSpineIndex - 1);
+	const goToNextChapter = () => setCurrentSpineIndex(currentSpineIndex + 1);
 
 	const imgTags = currentDoc ? [...currentDoc.getElementsByTagName('img')] : [];
 	const imageCount = imgTags.length;
@@ -117,6 +120,12 @@ export default function Viewer ({appDB, currentBook}) {
 			case "ArrowRight":
 				goToNextPage();
 				break;
+			case "ArrowUp":
+				goToPreviousChapter();
+				break;
+			case "ArrowDown":
+				goToNextChapter();
+				break;
 			default:
 		}
 	}
@@ -144,8 +153,16 @@ export default function Viewer ({appDB, currentBook}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					<section className="absolute top-0 w-2/5 h-full cursor-pointer left-0" onClick={() => goToPreviousPage()}></section>
-					<section className="absolute top-0 w-3/5 h-full cursor-pointer right-0" onClick={() => goToNextPage()}></section>
+					<section className="absolute top-0 left-0 w-full h-full cursor-pointer">
+						<header className="h-1/6" onClick={goToPreviousChapter}></header>
+
+						<main className="h-4/6 flex">
+							<section className="w-2/5 h-full" onClick={goToPreviousPage}></section>
+							<section className="w-3/5 h-full" onClick={goToNextPage}></section>
+						</main>
+
+						<footer className="h-1/6" onClick={goToNextChapter}></footer>
+					</section>
 				</main>
 			</main>
 		</article>
