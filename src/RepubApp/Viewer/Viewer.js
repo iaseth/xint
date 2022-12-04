@@ -169,11 +169,11 @@ export default function Viewer ({appDB, currentBook, goBackHome}) {
 
 				<main className="bg-white h-full w-full max-w-lg mx-auto overflow-hidden relative">
 
-					<section ref={pageViewRef} className="relative" style={containerStyle}>
+					<section ref={pageViewRef} className="relative duration-300" style={containerStyle}>
 						<PageView {...{currentDoc}} />
 					</section>
 
-					{showOptions && <OptionsScreen {...{toggleOptions, goBackHome}} />}
+					{showOptions && <OptionsScreen {...{pageViewRef, pageNumber, setPageNumber, toggleOptions, goBackHome}} />}
 
 					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, toggleToolbox, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
