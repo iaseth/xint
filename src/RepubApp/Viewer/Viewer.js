@@ -2,9 +2,7 @@ import React from 'react';
 import path from 'path-browserify';
 import JSZip from 'jszip';
 
-import TocView from './TocView/TocView';
-import SpineView from './SpineView/SpineView';
-import OptionsView from './OptionsView/OptionsView';
+import {TocView, SpineView, OptionsView} from './TopScreens';
 
 import LoadingView from './LoadingView/LoadingView';
 import PageView from './PageView/PageView';
