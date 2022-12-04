@@ -2,7 +2,7 @@
 
 
 export default function ClickScreen ({
-	toggleToc, toggleOptions, toggleSpine,
+	toggleToc, toggleOptions, toggleSpine, toggleToolbox,
 	goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter
 }) {
 
@@ -20,8 +20,9 @@ export default function ClickScreen ({
 			</main>
 
 			<footer className="h-1/6 flex">
-				<section className="w-2/5 h-full" onClick={goToPreviousChapter}></section>
-				<section className="w-3/5 h-full" onClick={goToNextChapter}></section>
+				<section className="w-1/3 h-full" onClick={goToPreviousChapter}></section>
+				<section className="w-1/3 h-full" onClick={toggleToolbox}></section>
+				<section className="w-1/3 h-full" onClick={goToNextChapter}></section>
 			</footer>
 		</section>
 	);

@@ -2,7 +2,7 @@ import React from 'react';
 import path from 'path-browserify';
 import JSZip from 'jszip';
 
-import {TocView, SpineView, OptionsView} from './TopScreens';
+import {TocView, SpineView, ToolboxView} from './TopScreens';
 
 import LoadingView from './LoadingView/LoadingView';
 import PageView from './PageView/PageView';
@@ -18,11 +18,13 @@ export default function Viewer ({appDB, currentBook}) {
 	const [zip, setZip] = React.useState(null);
 
 	const [showToc, setShowToc] = React.useState(false);
-	const [showSpine, setShowSpine] = React.useState(false);
 	const [showOptions, setShowOptions] = React.useState(false);
+	const [showSpine, setShowSpine] = React.useState(false);
+	const [showToolbox, setShowToolbox] = React.useState(false);
 	const toggleToc = () => setShowToc(x => !x);
-	const toggleSpine = () => setShowSpine(x => !x);
 	const toggleOptions = () => setShowOptions(x => !x);
+	const toggleSpine = () => setShowSpine(x => !x);
+	const toggleToolbox = () => setShowToolbox(x => !x);
 
 	const [spineItems, setSpineItems] = React.useState([]);
 	const [currentSpineId, setCurrentSpineId] = React.useState(null);
@@ -139,17 +141,13 @@ export default function Viewer ({appDB, currentBook}) {
 		const {key} = event;
 		switch (key) {
 			case "ArrowLeft":
-				goToPreviousPage();
-				break;
+				goToPreviousPage(); break;
 			case "ArrowRight":
-				goToNextPage();
-				break;
+				goToNextPage(); break;
 			case "ArrowUp":
-				goToPreviousChapter();
-				break;
+				goToPreviousChapter(); break;
 			case "ArrowDown":
-				goToNextChapter();
-				break;
+				goToNextChapter(); break;
 			default:
 		}
 	}
@@ -174,7 +172,7 @@ export default function Viewer ({appDB, currentBook}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
+					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, toggleToolbox, goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
 
 				<footer>
@@ -182,8 +180,8 @@ export default function Viewer ({appDB, currentBook}) {
 						<TocView {...{tocItems, currentSpineId, setCurrentSpineId, toggleToc}} />
 					</aside>
 
-					<aside className="fixed left-0 w-full h-full z-40 duration-300" style={{ top: showOptions ? "0" : "100%" }}>
-						<OptionsView {...{toggleOptions}} />
+					<aside className="fixed left-0 w-full h-full z-40 duration-300" style={{ top: showToolbox ? "0" : "100%" }}>
+						<ToolboxView {...{toggleToolbox}} />
 					</aside>
 
 					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ right: showSpine ? "0" : "-100%" }}>
