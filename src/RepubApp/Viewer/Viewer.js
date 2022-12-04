@@ -8,6 +8,7 @@ import OptionsView from './OptionsView/OptionsView';
 
 import LoadingView from './LoadingView/LoadingView';
 import PageView from './PageView/PageView';
+import ClickScreen from './ClickScreen/ClickScreen';
 
 import {getSpineItemDocsFromZip} from '../Utils';
 
@@ -69,6 +70,9 @@ export default function Viewer ({appDB, currentBook}) {
 		// loads images into blobs
 		if (currentDoc) {
 			// yet to load any image
+			setShowToc(false);
+			setShowSpine(false);
+			setShowOptions(false);
 			setPageNumber(0);
 			setLoadedImageCount(0);
 
@@ -161,35 +165,20 @@ export default function Viewer ({appDB, currentBook}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					<section className="absolute top-0 left-0 w-full h-full cursor-pointer border-2 border-red-500">
-						<header className="h-1/6 flex">
-							<section className="w-1/3 h-full" onClick={toggleToc}></section>
-							<section className="w-1/3 h-full" onClick={toggleOptions}></section>
-							<section className="w-1/3 h-full" onClick={toggleSpine}></section>
-						</header>
-
-						<main className="h-4/6 flex">
-							<section className="w-2/5 h-full" onClick={goToPreviousPage}></section>
-							<section className="w-3/5 h-full" onClick={goToNextPage}></section>
-						</main>
-
-						<footer className="h-1/6" onClick={goToNextChapter}></footer>
-					</section>
+					<ClickScreen {...{toggleToc, toggleOptions, toggleSpine, goToPreviousPage, goToNextPage, goToNextChapter}} />
 				</main>
 
 				<footer>
-					<aside className="fixed top-0 w-full h-full max-w-sm z-70 bg-white border-r-2 border-slate-300 duration-300 overflow-y-scroll" style={{ left: showToc ? "0" : "-100%" }}>
-						<TocView {...{tocItems, currentSpineId, setCurrentSpineId}} />
+					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ left: showToc ? "0" : "-100%" }}>
+						<TocView {...{tocItems, currentSpineId, setCurrentSpineId, toggleToc}} />
 					</aside>
 
-					<aside className="fixed left-0 w-full h-full z-70 duration-300 overflow-y-scroll" style={{ top: showOptions ? "0" : "100%" }}>
-						<div className="max-w-md mx-auto px-4 py-4">
-							<OptionsView />
-						</div>
+					<aside className="fixed left-0 w-full h-full z-40 duration-300" style={{ top: showOptions ? "0" : "100%" }}>
+						<OptionsView {...{toggleOptions}} />
 					</aside>
 
-					<aside className="fixed top-0 w-full h-full max-w-sm z-70 bg-white border-l-2 border-slate-300 duration-300 overflow-y-scroll" style={{ right: showSpine ? "0" : "-100%" }}>
-						<SpineView />
+					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ right: showSpine ? "0" : "-100%" }}>
+						<SpineView {...{toggleSpine}} />
 					</aside>
 				</footer>
 			</main>
