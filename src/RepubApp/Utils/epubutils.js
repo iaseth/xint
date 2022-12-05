@@ -19,22 +19,25 @@ export async function getSpineItemDocsFromZip (zip, meta) {
 
 function getTocItems (navMap, basepath, spineItems) {
 	const navPoints = [...navMap.children].filter(tag => tag.nodeName === 'navPoint');
+	if (navPoints.length === 0) {
+		return [];
+	}
+
 	return navPoints.map(navPoint => {
 		const navLabel = navPoint.getElementsByTagName('navLabel')[0] || null;
 		const text = navLabel ? navLabel.getElementsByTagName('text')[0].innerHTML.trim() : "";
 		const src = navPoint.getElementsByTagName('content')[0].getAttribute('src');
 		const fullpath = path.join(basepath, src);
 		const spineItem = spineItems.find(x => x.fullpath === fullpath);
+		const chapters = getTocItems(navPoint, basepath, spineItems);
 
 		return {
 			className: navPoint.getAttribute('class'),
 			id: navPoint.getAttribute('id'),
 			playOrder: navPoint.getAttribute('playOrder'),
-			text: text,
-			fullpath: fullpath,
 			spineId: spineItem.id,
 			size: spineItem.size,
-			chapters: getTocItems(navPoint, basepath, spineItems)
+			text, fullpath, chapters
 		};
 	});
 }
