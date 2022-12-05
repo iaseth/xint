@@ -19,16 +19,17 @@ const DATABASE_TABLES = [
 
 const DEFAULT_JSON = {
 	books: [],
-	settings: {}
+	bookshelves: [],
+	options: {}
 };
 
-function getBooksFromLS () {
+function getAppdataFromLS () {
 	const jsonText = LS.getItem(APPNAME);
 	if (jsonText) {
 		const jo = JSON.parse(jsonText);
-		return jo.books || [];
+		return jo;
 	} else {
-		return [];
+		return DEFAULT_JSON;
 	}
 }
 
@@ -38,10 +39,15 @@ export default function XintApp () {
 	const [lockScreen, setLockScreen] = React.useState(false);
 	const toggleLockScreen = () => setLockScreen(x => !x);
 
-	const [books, setBooks] = React.useState(getBooksFromLS());
+	const [appdata, setAppdata] = React.useState(getAppdataFromLS());
+	const reloadAppdata = () => {
+		setAppdata(getAppdataFromLS());
+		setCurrentBookIndex(-1);
+	};
+
+	const {books, bookshelves} = appdata;
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
-
 	const openReader = (bookIndex) => setCurrentBookIndex(bookIndex);
 	const goBackHome = () => setCurrentBookIndex(-1);
 
@@ -96,7 +102,7 @@ export default function XintApp () {
 			console.log(`Saved EPUB to database: bookId '#${bookId}'`);
 		};
 
-		reloadBooks();
+		reloadAppdata();
 	}
 
 	function deleteBookFromLS (bookId) {
@@ -112,14 +118,9 @@ export default function XintApp () {
 			console.log(`Deleted EPUB from database: bookId '#${bookId}'`);
 		};
 
-		reloadBooks();
+		reloadAppdata();
 	}
 
-
-	function reloadBooks () {
-		setBooks(getBooksFromLS());
-		setCurrentBookIndex(-1);
-	}
 
 	if (splashScreen) {
 		return <SplashScreen {...{APPNAME}} />;
