@@ -4,6 +4,8 @@ import './XintApp.scss';
 
 import Home from './Home/Home';
 import Reader from './Reader/Reader';
+import SplashScreen from './SplashScreen/SplashScreen';
+import LockScreen from './LockScreen/LockScreen';
 
 const LS = window.localStorage;
 const IDB = window.indexedDB;
@@ -31,6 +33,11 @@ function getBooksFromLS () {
 }
 
 export default function XintApp () {
+	// shows or hides splash/lock screen
+	const [splashScreen, setSplashScreen] = React.useState(true);
+	const [lockScreen, setLockScreen] = React.useState(false);
+	const toggleLockScreen = () => setLockScreen(x => !x);
+
 	const [books, setBooks] = React.useState(getBooksFromLS());
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
@@ -61,6 +68,14 @@ export default function XintApp () {
 				appDB.close();
 			}
 		};
+	}, []);
+
+
+	React.useEffect(() => {
+		setTimeout(() => {
+			// hides splashscreen after 5s
+			setSplashScreen(false);
+		}, 1000);
 	}, []);
 
 
@@ -106,9 +121,13 @@ export default function XintApp () {
 		setCurrentBookIndex(-1);
 	}
 
-	if (currentBook) {
+	if (splashScreen) {
+		return <SplashScreen {...{APPNAME}} />;
+	} else if (lockScreen) {
+		return <LockScreen {...{APPNAME, toggleLockScreen}} />;
+	} else if (currentBook) {
 		return <Reader {...{appDB, currentBook, goBackHome}} />;
 	} else {
-		return <Home {...{addBookToLS, deleteBookFromLS, books, openReader}} />;
+		return <Home {...{addBookToLS, deleteBookFromLS, books, openReader, toggleLockScreen}} />;
 	}
 }

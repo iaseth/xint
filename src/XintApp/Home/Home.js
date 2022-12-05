@@ -21,7 +21,7 @@ const XINT_TABS = [
 
 export default function Home ({
 	addBookToLS, deleteBookFromLS,
-	books, openReader
+	books, openReader, toggleLockScreen
 }) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentTab = XINT_TABS[currentTabIndex];
@@ -34,6 +34,8 @@ export default function Home ({
 				setFullscreen(fullscreen => !fullscreen);
 			} else if (event.key === "D") {
 				setCurrentTabIndex(XINT_TABS.findIndex(tab => tab.title === "Debug"));
+			} else if (event.key === "L") {
+				toggleLockScreen();
 			}
 		}
 	}
