@@ -160,11 +160,14 @@ export default function RepubApp () {
 		}
 	}
 
+	if (currentBook) {
+		return <Viewer {...{appDB, currentBook, goBackHome}} />;
+	}
 
 	return (
 		<div onKeyDown={handleKeyDown}>
 			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}} />
-			{currentBook ? <Viewer {...{appDB, currentBook, goBackHome}} /> : getCurrentTab()}
+			{getCurrentTab()}
 			<Footer {...{fullscreen}} />
 		</div>
 	);

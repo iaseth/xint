@@ -186,7 +186,7 @@ export default function Viewer ({appDB, currentBook, goBackHome}) {
 						<TocView {...{tocItems, currentSpineId, setCurrentSpineId, toggleToc}} />
 					</aside>
 
-					<aside className="fixed left-0 w-full h-full z-40 duration-300" style={{ top: showToolbox ? "0" : "100%" }}>
+					<aside className="fixed left-0 w-full h-full z-40" style={{ top: showToolbox ? "0" : "100%" }}>
 						<ToolboxView {...{toggleToolbox}} />
 					</aside>
 
