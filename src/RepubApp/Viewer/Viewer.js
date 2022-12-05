@@ -142,13 +142,17 @@ export default function Viewer ({appDB, currentBook, goBackHome}) {
 		const {key} = event;
 		switch (key) {
 			case "ArrowLeft":
-				goToPreviousPage(); break;
+				event.ctrlKey ? toggleToc() : goToPreviousPage();
+				break;
 			case "ArrowRight":
-				goToNextPage(); break;
+				event.ctrlKey ? toggleSpine() : goToNextPage();
+				break;
 			case "ArrowUp":
-				goToPreviousChapter(); break;
+				event.ctrlKey ? toggleOptions() : goToPreviousChapter();
+				break;
 			case "ArrowDown":
-				goToNextChapter(); break;
+				event.ctrlKey ? toggleToolbox() : goToNextChapter();
+				break;
 			default:
 		}
 	}
