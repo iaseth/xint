@@ -19,10 +19,7 @@ const XINT_TABS = [
 
 
 
-export default function HomeScreen ({
-	addBookToLS, deleteBookFromLS,
-	books, openReader, toggleLockScreen
-}) {
+export default function HomeScreen ({crudUtils, books, openReader, toggleLockScreen}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentTab = XINT_TABS[currentTabIndex];
 
@@ -55,7 +52,7 @@ export default function HomeScreen ({
 				return <OptionsPage />;
 			case "Home":
 			default:
-				return <DashPage {...{books, openReader, addBookToLS, deleteBookFromLS}} />;
+				return <DashPage {...{books, openReader, crudUtils}} />;
 		}
 	}
 

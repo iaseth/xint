@@ -6,7 +6,7 @@ import {Button} from '../../Utils';
 
 
 
-export default function DashPage ({books, openReader, addBookToLS, deleteBookFromLS}) {
+export default function DashPage ({books, openReader, crudUtils}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -14,6 +14,8 @@ export default function DashPage ({books, openReader, addBookToLS, deleteBookFro
 
 	const [showBookAdder, setShowBookAdder] = React.useState(false);
 	const hideBookAdder = () => setShowBookAdder(false);
+
+	const {addBookToLS, deleteBookFromLS} = crudUtils;
 
 	function handleUploadChange (event) {
 		const firstFile = event.target.files[0] || null;

@@ -7,31 +7,17 @@ import ReaderScreen from './ReaderScreen/ReaderScreen';
 import SplashScreen from './SplashScreen/SplashScreen';
 import LockScreen from './LockScreen/LockScreen';
 
-const LS = window.localStorage;
+import {getAppdataFromLS, getCrudUtils} from './Utils';
+
 const IDB = window.indexedDB;
 
-const APPNAME = "xint";
+export const APPNAME = "xint";
 const DATABASE_NAME = APPNAME;
 const DATABASE_TABLES = [
 	{name: "epubs", "fields": []},
 	{name: "covers", "fields": []},
 ];
 
-const DEFAULT_JSON = {
-	books: [],
-	bookshelves: [],
-	options: {}
-};
-
-function getAppdataFromLS () {
-	const jsonText = LS.getItem(APPNAME);
-	if (jsonText) {
-		const jo = JSON.parse(jsonText);
-		return jo;
-	} else {
-		return DEFAULT_JSON;
-	}
-}
 
 export default function XintApp () {
 	// shows or hides splash/lock screen
@@ -52,6 +38,7 @@ export default function XintApp () {
 	const goBackHome = () => setCurrentBookIndex(-1);
 
 	const [appDB, setAppDB] = React.useState(null);
+	const crudUtils = getCrudUtils(appDB, reloadAppdata);
 	React.useEffect(() => {
 		const request = IDB.open(DATABASE_NAME, 1);
 		request.onsuccess = (event) => {
@@ -85,43 +72,6 @@ export default function XintApp () {
 	}, []);
 
 
-	function addBookToLS (meta, file) {
-		const jsonText = LS.getItem(APPNAME);
-		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
-
-		const bookIds = jsonData.books.map(b => b.bookId);
-		const maxId = Math.max(0, bookIds);
-		const bookId = maxId + 1;
-
-		jsonData.books.push({bookId, meta});
-		LS.setItem(APPNAME, JSON.stringify(jsonData));
-
-		const tx = appDB.transaction('epubs', 'readwrite');
-		tx.objectStore('epubs').put({id: bookId, file});
-		tx.oncomplete = () => {
-			console.log(`Saved EPUB to database: bookId '#${bookId}'`);
-		};
-
-		reloadAppdata();
-	}
-
-	function deleteBookFromLS (bookId) {
-		const jsonText = LS.getItem(APPNAME);
-		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
-
-		jsonData.books = jsonData.books.filter(b => b.bookId !== bookId);
-		LS.setItem(APPNAME, JSON.stringify(jsonData));
-
-		const tx = appDB.transaction('epubs', 'readwrite');
-		tx.objectStore('epubs').delete(bookId);
-		tx.oncomplete = () => {
-			console.log(`Deleted EPUB from database: bookId '#${bookId}'`);
-		};
-
-		reloadAppdata();
-	}
-
-
 	if (splashScreen) {
 		return <SplashScreen {...{APPNAME}} />;
 	} else if (lockScreen) {
@@ -129,6 +79,6 @@ export default function XintApp () {
 	} else if (currentBook) {
 		return <ReaderScreen {...{appDB, currentBook, goBackHome}} />;
 	} else {
-		return <HomeScreen {...{addBookToLS, deleteBookFromLS, books, openReader, toggleLockScreen}} />;
+		return <HomeScreen {...{crudUtils, books, openReader, toggleLockScreen}} />;
 	}
 }
