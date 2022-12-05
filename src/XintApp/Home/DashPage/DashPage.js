@@ -2,11 +2,11 @@ import React from 'react';
 
 import BookAdder from './BookAdder';
 import BookList from './BookList/BookList';
-import {Button} from '../Utils';
+import {Button} from '../../Utils';
 
 
 
-export default function DashPage ({books, openViewer, addBookToLS, deleteBookFromLS}) {
+export default function DashPage ({books, openReader, addBookToLS, deleteBookFromLS}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -27,7 +27,7 @@ export default function DashPage ({books, openViewer, addBookToLS, deleteBookFro
 		<div className="bg-slate-100">
 
 			<main className="min-h-screen">
-				<BookList {...{books, openViewer, deleteBookFromLS}} />
+				<BookList {...{books, openReader, deleteBookFromLS}} />
 			</main>
 
 			<footer className="bg-slate-200">

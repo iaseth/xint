@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {Button} from '../Utils';
-import {getEbookData} from '../Utils';
+import {Button} from '../../Utils';
+import {getEbookData} from '../../Utils';
 
 
 

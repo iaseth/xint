@@ -2,24 +2,8 @@ import React from 'react';
 
 import './XintApp.scss';
 
-import Header from './Header';
-import Footer from './Footer';
-
-import DashPage from './DashPage/DashPage';
-import OptionsPage from './OptionsPage/OptionsPage';
-import StorePage from './StorePage/StorePage';
-import DebugPage from './DebugPage/DebugPage';
-
+import Home from './Home/Home';
 import Reader from './Reader/Reader';
-
-
-
-const XINT_TABS = [
-	{Component: DashPage, title: "Dash", letter: "D"},
-	{Component: StorePage, title: "Store", letter: "S"},
-	{Component: OptionsPage, title: "Options", letter: "O"},
-	{Component: DebugPage, title: "Debug", letter: "G", hidden: true},
-];
 
 const LS = window.localStorage;
 const IDB = window.indexedDB;
@@ -47,21 +31,12 @@ function getBooksFromLS () {
 }
 
 export default function XintApp () {
-	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
-	const currentTab = XINT_TABS[currentTabIndex];
-
-	const [fullscreen, setFullscreen] = React.useState(false);
 	const [books, setBooks] = React.useState(getBooksFromLS());
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
-	const openViewer = (bookIndex) => {
-		setFullscreen(true);
-		setCurrentBookIndex(bookIndex);
-	};
-	const goBackHome = () => {
-		setFullscreen(false);
-		setCurrentBookIndex(-1);
-	};
+
+	const openReader = (bookIndex) => setCurrentBookIndex(bookIndex);
+	const goBackHome = () => setCurrentBookIndex(-1);
 
 	const [appDB, setAppDB] = React.useState(null);
 	React.useEffect(() => {
@@ -88,11 +63,6 @@ export default function XintApp () {
 		};
 	}, []);
 
-
-	function reloadBooks () {
-		setBooks(getBooksFromLS());
-		setCurrentBookIndex(-1);
-	}
 
 	function addBookToLS (meta, file) {
 		const jsonText = LS.getItem(APPNAME);
@@ -131,44 +101,14 @@ export default function XintApp () {
 	}
 
 
-	function handleKeyDown (event) {
-		if (event.altKey && event.ctrlKey && event.shiftKey) {
-			if (event.key === "F") {
-				setFullscreen(fullscreen => !fullscreen);
-			} else if (event.key === "D") {
-				setCurrentTabIndex(XINT_TABS.findIndex(tab => tab.title === "Debug"));
-			}
-		}
-	}
-
-	React.useEffect(() => {
-		window.addEventListener('keydown', handleKeyDown, false);
-		return () => window.removeEventListener('keydown', handleKeyDown, false);
-	});
-
-	function getCurrentTab () {
-		switch (currentTab.title) {
-			case "Debug":
-				return <DebugPage />;
-			case "Store":
-				return <StorePage />;
-			case "Options":
-				return <OptionsPage />;
-			case "Home":
-			default:
-				return <DashPage {...{books, openViewer, addBookToLS, deleteBookFromLS}} />;
-		}
+	function reloadBooks () {
+		setBooks(getBooksFromLS());
+		setCurrentBookIndex(-1);
 	}
 
 	if (currentBook) {
 		return <Reader {...{appDB, currentBook, goBackHome}} />;
+	} else {
+		return <Home {...{addBookToLS, deleteBookFromLS, books, openReader}} />;
 	}
-
-	return (
-		<div onKeyDown={handleKeyDown}>
-			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, XINT_TABS}} />
-			{getCurrentTab()}
-			<Footer {...{fullscreen}} />
-		</div>
-	);
 }
