@@ -17,7 +17,7 @@ export default function SpineView ({spineItems, currentSpineId, setCurrentSpineI
 
 	return (
 		<section className="h-full w-full flex">
-			<div className="grow" onClick={toggleSpine}></div>
+			<div className="grow translucent" onClick={toggleSpine}></div>
 			<div className="grow h-full max-w-sm bg-white border-l-2 border-slate-300 overflow-y-scroll">
 				<div>{items}</div>
 			</div>

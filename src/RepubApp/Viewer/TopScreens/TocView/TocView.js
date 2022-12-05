@@ -9,7 +9,7 @@ export default function TocView ({tocItems, currentSpineId, setCurrentSpineId, t
 			<div className="grow h-full max-w-sm bg-white border-r-2 border-slate-300 overflow-y-scroll">
 				<TocItems {...{tocItems, currentSpineId, setCurrentSpineId}} />
 			</div>
-			<div className="grow" onClick={toggleToc}></div>
+			<div className="grow translucent" onClick={toggleToc}></div>
 		</section>
 	);
 }

@@ -1,6 +1,19 @@
 
 
 
+function DotsGrid ({title, dots}) {
+	if (dots.length < 2) {
+		return null;
+	}
+
+	return (
+		<section className="px-4 py-1">
+			<h5 className="max-w-xs mx-auto px-2">{title}</h5>
+			<div className="grid grid-cols-12 py-2 max-w-xs mx-auto">{dots}</div>
+		</section>
+	);
+}
+
 export default function OptionsFooter ({
 	pageViewRef, pageNumber, setPageNumber,
 	currentSpineId, setCurrentSpineId, tocItems
@@ -35,16 +48,9 @@ export default function OptionsFooter ({
 	});
 
 	return (
-		<footer className="bg-white border-t-2 border-zinc-500 py-3">
-			{pageCount > 1 && <section className="px-4 py-2">
-				<h5 className="max-w-xs mx-auto px-2">{pageCount} pages in this chapter</h5>
-				<div className="grid grid-cols-12 py-2 max-w-xs mx-auto">{pageDots}</div>
-			</section>}
-
-			<section className="px-4 py-2">
-				<h5 className="max-w-xs mx-auto px-2">{tocItems.length} chapters in this book</h5>
-				<div className="grid grid-cols-12 py-2 max-w-xs mx-auto">{chapterDots}</div>
-			</section>
+		<footer className="bg-white border-t-2 border-zinc-500 py-4">
+			<DotsGrid title={`${pageCount} pages in this chapter`} dots={pageDots} />
+			<DotsGrid title={`${tocItems.length} chapters in this book`} dots={chapterDots} />
 		</footer>
 	);
 }

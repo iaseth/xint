@@ -18,6 +18,10 @@ img {
 	max-height: 80vh;
 }
 
+.translucent {
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
 table {
 	@apply font-bold text-sm text-slate-800 border-2 border-zinc-500;
 
