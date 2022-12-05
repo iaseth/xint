@@ -5,8 +5,8 @@ import BookBox from './BookBox';
 export default function BookList ({books, openViewer, deleteBookFromLS}) {
 
 	return (
-		<section className="max-w-5xl mx-auto py-6 px-4">
-			<header>
+		<section className="max-w-5xl mx-auto py-6 px-2">
+			<header className="px-2 py-2">
 				<h2>BookList</h2>
 				<h4>{books.length} books</h4>
 			</header>
