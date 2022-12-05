@@ -5,7 +5,7 @@ import './XintApp.scss';
 import Header from './Header';
 import Footer from './Footer';
 
-import HomePage from './HomePage/HomePage';
+import DashPage from './DashPage/DashPage';
 import OptionsPage from './OptionsPage/OptionsPage';
 import StorePage from './StorePage/StorePage';
 import DebugPage from './DebugPage/DebugPage';
@@ -15,10 +15,10 @@ import Reader from './Reader/Reader';
 
 
 const XINT_TABS = [
-	{Component: HomePage, title: "Home", letter: "H"},
+	{Component: DashPage, title: "Dash", letter: "D"},
 	{Component: StorePage, title: "Store", letter: "S"},
 	{Component: OptionsPage, title: "Options", letter: "O"},
-	{Component: DebugPage, title: "Debug", letter: "D", hidden: true},
+	{Component: DebugPage, title: "Debug", letter: "G", hidden: true},
 ];
 
 const LS = window.localStorage;
@@ -156,7 +156,7 @@ export default function XintApp () {
 				return <OptionsPage />;
 			case "Home":
 			default:
-				return <HomePage {...{books, openViewer, addBookToLS, deleteBookFromLS}} />;
+				return <DashPage {...{books, openViewer, addBookToLS, deleteBookFromLS}} />;
 		}
 	}
 

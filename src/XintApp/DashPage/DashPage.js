@@ -6,7 +6,7 @@ import {Button} from '../Utils';
 
 
 
-export default function HomePage ({books, openViewer, addBookToLS, deleteBookFromLS}) {
+export default function DashPage ({books, openViewer, addBookToLS, deleteBookFromLS}) {
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
