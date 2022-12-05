@@ -19,7 +19,7 @@ const XINT_TABS = [
 
 
 
-export default function HomeScreen ({crudUtils, books, openReader, toggleLockScreen}) {
+export default function HomeScreen ({books, openReader, toggleLockScreen, crudUtils}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentTab = XINT_TABS[currentTabIndex];
 

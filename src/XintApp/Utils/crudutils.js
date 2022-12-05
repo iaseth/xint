@@ -11,15 +11,20 @@ const DEFAULT_JSON = {
 };
 
 
-export function getAppdataFromLS () {
-	const jsonText = LS.getItem(APPNAME);
-	if (jsonText) {
-		const jo = JSON.parse(jsonText);
-		return jo;
-	} else {
-		return DEFAULT_JSON;
+export const LSU = {
+	getAppdataFromLS: () => {
+		const jsonText = LS.getItem(APPNAME);
+		if (jsonText) {
+			const jo = JSON.parse(jsonText);
+			return jo;
+		} else {
+			return DEFAULT_JSON;
+		}
+	},
+	saveAppdataToLS: (appdata) => {
+		LS.setItem(APPNAME, JSON.stringify(appdata));
 	}
-}
+};
 
 
 export function getCrudUtils (appDB, reloadAppdata) {
