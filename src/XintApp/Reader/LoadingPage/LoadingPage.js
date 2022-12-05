@@ -1,7 +1,7 @@
 
 
 
-export default function LoadingView () {
+export default function LoadingPage () {
 	return (
 		<div className="h-screen bg-red-400 text-white">
 			<main className="h-full flex">

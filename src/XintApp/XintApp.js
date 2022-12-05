@@ -10,7 +10,7 @@ import OptionsPage from './OptionsPage/OptionsPage';
 import StorePage from './StorePage/StorePage';
 import DebugPage from './DebugPage/DebugPage';
 
-import Viewer from './Viewer/Viewer';
+import Reader from './Reader/Reader';
 
 
 
@@ -161,7 +161,7 @@ export default function XintApp () {
 	}
 
 	if (currentBook) {
-		return <Viewer {...{appDB, currentBook, goBackHome}} />;
+		return <Reader {...{appDB, currentBook, goBackHome}} />;
 	}
 
 	return (

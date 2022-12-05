@@ -4,7 +4,7 @@ import JSZip from 'jszip';
 
 import {TocView, SpineView, ToolboxView} from './TopScreens';
 
-import LoadingView from './LoadingView/LoadingView';
+import LoadingPage from './LoadingPage/LoadingPage';
 import PageView from './PageView/PageView';
 import ClickScreen from './ClickScreen/ClickScreen';
 import OptionsScreen from './OptionsScreen/OptionsScreen';
@@ -13,7 +13,7 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 
 
-export default function Viewer ({appDB, currentBook, goBackHome}) {
+export default function Reader ({appDB, currentBook, goBackHome}) {
 	const {bookId, meta} = currentBook;
 	const {tocItems} = meta;
 	const [zip, setZip] = React.useState(null);
@@ -164,7 +164,7 @@ export default function Viewer ({appDB, currentBook, goBackHome}) {
 
 
 	if (currentDoc === null) {
-		return <LoadingView />;
+		return <LoadingPage />;
 	}
 
 	return (
