@@ -13,7 +13,7 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 
 
-export default function Reader ({appDB, currentBook, goBackHome}) {
+export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
 	const {bookId, meta} = currentBook;
 	const {tocItems} = meta;
 	const [zip, setZip] = React.useState(null);

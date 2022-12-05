@@ -2,8 +2,8 @@ import React from 'react';
 
 import './XintApp.scss';
 
-import Home from './Home/Home';
-import Reader from './Reader/Reader';
+import HomeScreen from './HomeScreen/HomeScreen';
+import ReaderScreen from './ReaderScreen/ReaderScreen';
 import SplashScreen from './SplashScreen/SplashScreen';
 import LockScreen from './LockScreen/LockScreen';
 
@@ -126,8 +126,8 @@ export default function XintApp () {
 	} else if (lockScreen) {
 		return <LockScreen {...{APPNAME, toggleLockScreen}} />;
 	} else if (currentBook) {
-		return <Reader {...{appDB, currentBook, goBackHome}} />;
+		return <ReaderScreen {...{appDB, currentBook, goBackHome}} />;
 	} else {
-		return <Home {...{addBookToLS, deleteBookFromLS, books, openReader, toggleLockScreen}} />;
+		return <HomeScreen {...{addBookToLS, deleteBookFromLS, books, openReader, toggleLockScreen}} />;
 	}
 }

@@ -19,7 +19,7 @@ const XINT_TABS = [
 
 
 
-export default function Home ({
+export default function HomeScreen ({
 	addBookToLS, deleteBookFromLS,
 	books, openReader, toggleLockScreen
 }) {
