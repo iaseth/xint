@@ -20,12 +20,14 @@ export default function ToolboxView ({toggleToolbox}) {
 
 	const tabItems = TOOLBOX_TABS.map((tab, k) => {
 		const current = k === toolboxTabIndex;
-		let className = "mx-[-1px] border-x-2 border-b-2 border-x-transparent";
+		let className = "mx-[-1px] border-x-2 border-b-2 border-x-transparent first:border-l-0 last:border-r-0";
 		className += current ? " border-x-zinc-500 border-b-transparent" : " border-b-zinc-500 cursor-pointer";
 
 		return (
 			<div key={k} onClick={() => setToolboxTabIndex(k)} className={className}>
-				<h5 className="px-2 py-4">{tab.title}</h5>
+				<h5 className="px-2 py-4">
+					<span className={`py-1 border-b-4 ${current ? "border-zinc-800" : "border-transparent"}`}>{tab.title}</span>
+				</h5>
 			</div>
 		);
 	});

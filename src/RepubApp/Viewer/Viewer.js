@@ -177,7 +177,7 @@ export default function Viewer ({appDB, currentBook, goBackHome}) {
 						<PageView {...{currentDoc}} />
 					</section>
 
-					{showOptions && <OptionsScreen {...{goBackHome, toggleOptions,
+					{showOptions && <OptionsScreen {...{goToPreviousChapter, goBackHome, goToNextChapter, toggleOptions,
 						pageViewRef, pageNumber, setPageNumber,
 						currentSpineId, setCurrentSpineId, tocItems}} />}
 
