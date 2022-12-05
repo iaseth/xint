@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './RepubApp.scss';
+import './XintApp.scss';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -14,7 +14,7 @@ import Viewer from './Viewer/Viewer';
 
 
 
-const REPUB_TABS = [
+const XINT_TABS = [
 	{Component: HomePage, title: "Home", letter: "H"},
 	{Component: StorePage, title: "Store", letter: "S"},
 	{Component: OptionsPage, title: "Options", letter: "O"},
@@ -24,7 +24,7 @@ const REPUB_TABS = [
 const LS = window.localStorage;
 const IDB = window.indexedDB;
 
-const APPNAME = "repubapp";
+const APPNAME = "xint";
 const DATABASE_NAME = APPNAME;
 const DATABASE_TABLES = [
 	{name: "epubs", "fields": []},
@@ -46,9 +46,9 @@ function getBooksFromLS () {
 	}
 }
 
-export default function RepubApp () {
+export default function XintApp () {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
-	const currentTab = REPUB_TABS[currentTabIndex];
+	const currentTab = XINT_TABS[currentTabIndex];
 
 	const [fullscreen, setFullscreen] = React.useState(false);
 	const [books, setBooks] = React.useState(getBooksFromLS());
@@ -136,7 +136,7 @@ export default function RepubApp () {
 			if (event.key === "F") {
 				setFullscreen(fullscreen => !fullscreen);
 			} else if (event.key === "D") {
-				setCurrentTabIndex(REPUB_TABS.findIndex(tab => tab.title === "Debug"));
+				setCurrentTabIndex(XINT_TABS.findIndex(tab => tab.title === "Debug"));
 			}
 		}
 	}
@@ -166,7 +166,7 @@ export default function RepubApp () {
 
 	return (
 		<div onKeyDown={handleKeyDown}>
-			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, REPUB_TABS}} />
+			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, XINT_TABS}} />
 			{getCurrentTab()}
 			<Footer {...{fullscreen}} />
 		</div>

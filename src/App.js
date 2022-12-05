@@ -1,11 +1,11 @@
-import RepubApp from './RepubApp/RepubApp';
+import XintApp from './XintApp/XintApp';
 
 
 
 function App () {
 	return (
 		<div className="App">
-			<RepubApp />
+			<XintApp />
 		</div>
 	);
 }
