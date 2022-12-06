@@ -15,8 +15,8 @@ export const APPNAME = "xint";
 const DATABASE_NAME = APPNAME;
 const DATABASE_TABLES = [
 	{name: "books", "fields": []},
-	{name: "epubs", "fields": []},
 	{name: "covers", "fields": []},
+	{name: "epubs", "fields": []},
 ];
 
 
@@ -56,9 +56,11 @@ export default function XintApp () {
 			};
 
 			request.onupgradeneeded = (event) => {
+				console.log(`Created database: '${DATABASE_NAME}'`);
 				const db = event.target.result;
 				DATABASE_TABLES.forEach(table => {
 					const store = db.createObjectStore(table.name, {keyPath: 'id'});
+					console.log(`\tCreated objectStore: '${table.name}'`);
 					table.fields.forEach(field => {
 						store.createIndex(field, field, {unique: false});
 					});
@@ -82,6 +84,16 @@ export default function XintApp () {
 	}, []);
 
 
+	const getImageFromDB = (bookId, callback) => {
+		const tx = appDB.transaction(['covers'], 'readonly');
+		const req = tx.objectStore('covers').get(bookId);
+		tx.oncomplete = () => {
+			const coverBlob = req.result ? req.result.coverBlob : null;
+			callback(coverBlob);
+		};
+	};
+
+
 	if (splashScreen) {
 		return <SplashScreen {...{APPNAME}} />;
 	} else if (lockScreen) {
@@ -89,6 +101,6 @@ export default function XintApp () {
 	} else if (currentBook) {
 		return <ReaderScreen {...{appDB, currentBook, goBackHome}} />;
 	} else {
-		return <HomeScreen {...{books, openReader, toggleLockScreen, crudUtils}} />;
+		return <HomeScreen {...{books, getImageFromDB, openReader, toggleLockScreen, crudUtils}} />;
 	}
 }

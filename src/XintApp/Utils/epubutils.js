@@ -111,6 +111,7 @@ export async function getEbookData (firstFile) {
 	const coverId = coverMeta ? coverMeta.getAttribute('content') : null;
 	const coverItem = manifestItems.find(x => x.id === coverId);
 	const coverPath = coverItem ? coverItem.fullpath : null;
+	const coverBlob = coverPath ? await zip.file(coverPath).async('blob') : null;
 
 	const meta = {
 		basepath, coverId, coverPath,
@@ -124,7 +125,7 @@ export async function getEbookData (firstFile) {
 		...meta, manifestItems, spineItems, tocItems,
 	};
 
-	return {zip, paths, opfPath, opfDoc, meta, details};
+	return {zip, paths, opfPath, opfDoc, meta, details, coverBlob};
 }
 
 

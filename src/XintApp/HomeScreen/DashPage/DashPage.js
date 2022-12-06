@@ -14,7 +14,7 @@ const DASH_TABS = [
 
 
 
-export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
+export default function DashPage ({fullscreen, books, getImageFromDB, openReader, crudUtils}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentDashTab = DASH_TABS[currentTabIndex];
 
@@ -26,7 +26,7 @@ export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
 				return <ShelvesTab />;
 			case "Dash":
 			default:
-				return <DashTab {...{books, openReader, crudUtils}} />;
+				return <DashTab {...{books, getImageFromDB, openReader, crudUtils}} />;
 		}
 	}
 

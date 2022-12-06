@@ -6,7 +6,7 @@ import {Button} from '../../../Utils';
 
 
 
-export default function DashTab ({books, openReader, crudUtils}) {
+export default function DashTab ({books, getImageFromDB, openReader, crudUtils}) {
 	const {addBookToLS, deleteBookFromLS} = crudUtils;
 	const fref = React.useRef(null);
 
@@ -27,7 +27,7 @@ export default function DashTab ({books, openReader, crudUtils}) {
 	return (
 		<div className="min-h-screen bg-slate-100">
 			<main className="min-h-screen">
-				<BookList {...{books, openReader, deleteBookFromLS}} />
+				<BookList {...{books, getImageFromDB, openReader, deleteBookFromLS}} />
 			</main>
 
 			<footer className="bg-slate-200">

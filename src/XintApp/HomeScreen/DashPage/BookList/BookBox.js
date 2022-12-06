@@ -4,16 +4,27 @@ import {Button, ShowMoreButton} from '../../../Utils';
 
 
 
-export default function BookBox ({k, book, openReader, deleteBookFromLS}) {
-	const {meta} = book;
+export default function BookBox ({k, book, getImageFromDB, openReader, deleteBookFromLS}) {
+	const {bookId, meta} = book;
 	const [expanded, setExpanded] = React.useState(false);
+	const [coverSrc, setCoverSrc] = React.useState(null);
+
+	React.useState(() => {
+		getImageFromDB(bookId, coverBlob => {
+			if (coverBlob) {
+				const URL = window.URL || window.webkitURL;
+				const coverBlobURL = URL.createObjectURL(coverBlob);
+				setCoverSrc(coverBlobURL);
+			}
+		});
+	}, []);
 
 	return (
 		<div>
 			<article className="bg-white rounded shadow overflow-hidden flex flex-col">
 				<header className="grow flex ch:basis-0 ch:grow">
-					<section className="h-64 bg-red-500 text-white py-12 cursor-pointer flex" onClick={() => openReader(k)}>
-						<h1 className="m-auto">Book</h1>
+					<section className="h-64 bg-red-500 text-white cursor-pointer flex" onClick={() => openReader(k)}>
+						{coverSrc ? <img src={coverSrc} className="w-full h-full" /> : <h1 className="m-auto">Book</h1>}
 					</section>
 
 					<section className="flex flex-col">

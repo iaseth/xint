@@ -21,7 +21,7 @@ const HOME_TABS = [
 
 
 
-export default function HomeScreen ({books, openReader, toggleLockScreen, crudUtils}) {
+export default function HomeScreen ({books, getImageFromDB, openReader, toggleLockScreen, crudUtils}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const currentHomeTab = HOME_TABS[currentTabIndex];
 
@@ -61,7 +61,7 @@ export default function HomeScreen ({books, openReader, toggleLockScreen, crudUt
 				return <OptionsPage />;
 			case "Dash":
 			default:
-				return <DashPage {...{fullscreen, books, openReader, crudUtils}} />;
+				return <DashPage {...{fullscreen, books, getImageFromDB, openReader, crudUtils}} />;
 		}
 	}
 
