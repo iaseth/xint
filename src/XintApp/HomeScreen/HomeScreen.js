@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Header from './Header';
-import Footer from './Footer';
 
 import DashPage from './DashPage/DashPage';
 import OptionsPage from './OptionsPage/OptionsPage';
@@ -52,15 +51,14 @@ export default function HomeScreen ({books, openReader, toggleLockScreen, crudUt
 				return <OptionsPage />;
 			case "Home":
 			default:
-				return <DashPage {...{books, openReader, crudUtils}} />;
+				return <DashPage {...{fullscreen, books, openReader, crudUtils}} />;
 		}
 	}
 
 	return (
-		<div onKeyDown={handleKeyDown}>
+		<div>
 			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, XINT_TABS}} />
 			{getCurrentTab()}
-			<Footer {...{fullscreen}} />
 		</div>
 	);
 }

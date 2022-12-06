@@ -17,7 +17,7 @@ export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex
 	});
 
 	return (
-		<header className="bg-red-500 text-white pt-2" hidden={fullscreen}>
+		<header className="bg-red-500 text-white pt-2 sticky top-0" hidden={fullscreen}>
 			<div className="max-w-5xl mx-auto px-2 flex ch:basis-0 ch:grow text-center select-none">
 				{tabItems}
 			</div>

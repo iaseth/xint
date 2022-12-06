@@ -2,11 +2,19 @@ import React from 'react';
 
 import BookAdder from './BookAdder';
 import BookList from './BookList/BookList';
+import Footer from '../Footer';
 import {Button} from '../../Utils';
 
+const DASH_TABS = [
+	{Component: "DashPage", title: "Dash", letter: "D"},
+	{Component: "StorePage", title: "Store", letter: "S"},
+	{Component: "OptionsPage", title: "Options", letter: "O"},
+];
 
 
-export default function DashPage ({books, openReader, crudUtils}) {
+
+export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
+	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 	const fref = React.useRef(null);
 
 	const [currentFile, setCurrentFile] = React.useState(null);
@@ -43,6 +51,8 @@ export default function DashPage ({books, openReader, crudUtils}) {
 				</section>}
 
 			</footer>
+
+			<Footer {...{fullscreen, currentTabIndex, setCurrentTabIndex}} TABS={DASH_TABS} />
 
 		</div>
 	);
