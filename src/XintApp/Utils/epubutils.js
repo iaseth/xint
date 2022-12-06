@@ -35,8 +35,8 @@ function getTocItems (navMap, basepath, spineItems) {
 			className: navPoint.getAttribute('class'),
 			id: navPoint.getAttribute('id'),
 			playOrder: navPoint.getAttribute('playOrder'),
-			spineId: spineItem.id,
-			size: spineItem.size,
+			spineId: spineItem?.id || null,
+			size: spineItem?.size || null,
 			text, fullpath, chapters
 		};
 	});

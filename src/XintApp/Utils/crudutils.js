@@ -39,7 +39,7 @@ export function getCrudUtils (appDB, reloadAppdata) {
 		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
 
 		const bookIds = jsonData.books.map(b => b.bookId);
-		const maxId = Math.max(0, bookIds);
+		const maxId = Math.max(0, ...bookIds);
 		const bookId = maxId + 1;
 
 		jsonData.books.push({bookId, meta});

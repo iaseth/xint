@@ -94,7 +94,7 @@ export default function XintApp () {
 	};
 
 
-	if (splashScreen) {
+	if (splashScreen || appDB === null) {
 		return <SplashScreen {...{APPNAME}} />;
 	} else if (lockScreen) {
 		return <LockScreen {...{APPNAME, toggleLockScreen}} />;
