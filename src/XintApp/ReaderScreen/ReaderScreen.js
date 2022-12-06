@@ -15,8 +15,11 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
 	const {bookId, meta} = currentBook;
-	const {tocItems} = meta;
 	const [zip, setZip] = React.useState(null);
+	const [details, setDetails] = React.useState({
+		tocItems: []
+	});
+	const {tocItems} = details;
 
 	const [showToc, setShowToc] = React.useState(false);
 	const [showOptions, setShowOptions] = React.useState(false);
@@ -61,15 +64,19 @@ export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
 
 	React.useEffect(() => {
 		// gets zip from database
-		const tx = appDB.transaction('epubs', 'readonly');
-		const req = tx.objectStore('epubs').get(bookId);
+		const tx = appDB.transaction(['books', 'epubs'], 'readonly');
+		const reqBook = tx.objectStore('books').get(bookId);
+		const reqEpub = tx.objectStore('epubs').get(bookId);
 		tx.oncomplete = () => {
-			const epub = req.result;
+			const bookResult = reqBook.result;
+			const epubResult = reqEpub.result;
+			const {details} = bookResult;
 			const zip = new JSZip();
 
-			zip.loadAsync(epub.file).then(zip => {
+			zip.loadAsync(epubResult.file).then(zip => {
 				setZip(zip);
-				getSpineItemDocsFromZip(zip, meta).then(spineItems => {
+				setDetails(details);
+				getSpineItemDocsFromZip(zip, details).then(spineItems => {
 					setSpineItems(spineItems);
 					// start from the first item in spine
 					setCurrentSpineId(spineItems[0].id);

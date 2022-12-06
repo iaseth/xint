@@ -33,7 +33,8 @@ export const LSU = {
 
 
 export function getCrudUtils (appDB, reloadAppdata) {
-	function addBookToLS (meta, file) {
+	function addBookToLS (data, file) {
+		const {meta, details} = data;
 		const jsonText = LS.getItem(APPNAME);
 		const jsonData = jsonText ? JSON.parse(jsonText) : {...DEFAULT_JSON};
 
@@ -44,7 +45,8 @@ export function getCrudUtils (appDB, reloadAppdata) {
 		jsonData.books.push({bookId, meta});
 		LS.setItem(APPNAME, JSON.stringify(jsonData));
 
-		const tx = appDB.transaction('epubs', 'readwrite');
+		const tx = appDB.transaction(['books', 'epubs'], 'readwrite');
+		tx.objectStore('books').put({id: bookId, details});
 		tx.objectStore('epubs').put({id: bookId, file});
 		tx.oncomplete = () => {
 			console.log(`Saved EPUB to database: bookId '#${bookId}'`);
@@ -60,7 +62,8 @@ export function getCrudUtils (appDB, reloadAppdata) {
 		jsonData.books = jsonData.books.filter(b => b.bookId !== bookId);
 		LS.setItem(APPNAME, JSON.stringify(jsonData));
 
-		const tx = appDB.transaction('epubs', 'readwrite');
+		const tx = appDB.transaction(['books', 'epubs'], 'readwrite');
+		tx.objectStore('books').delete(bookId);
 		tx.objectStore('epubs').delete(bookId);
 		tx.oncomplete = () => {
 			console.log(`Deleted EPUB from database: bookId '#${bookId}'`);

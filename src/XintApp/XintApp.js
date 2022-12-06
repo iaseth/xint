@@ -14,6 +14,7 @@ const IDB = window.indexedDB;
 export const APPNAME = "xint";
 const DATABASE_NAME = APPNAME;
 const DATABASE_TABLES = [
+	{name: "books", "fields": []},
 	{name: "epubs", "fields": []},
 	{name: "covers", "fields": []},
 ];
@@ -47,21 +48,23 @@ export default function XintApp () {
 	const [appDB, setAppDB] = React.useState(null);
 	const crudUtils = getCrudUtils(appDB, reloadAppdata);
 	React.useEffect(() => {
-		const request = IDB.open(DATABASE_NAME, 1);
-		request.onsuccess = (event) => {
-			const db = event.target.result;
-			setAppDB(db);
-		};
+		if (appDB === null) {
+			const request = IDB.open(DATABASE_NAME, 1);
+			request.onsuccess = (event) => {
+				const db = event.target.result;
+				setAppDB(db);
+			};
 
-		request.onupgradeneeded = (event) => {
-			const db = event.target.result;
-			DATABASE_TABLES.forEach(table => {
-				const store = db.createObjectStore(table.name, {keyPath: 'id'});
-				table.fields.forEach(field => {
-					store.createIndex(field, field, {unique: false});
+			request.onupgradeneeded = (event) => {
+				const db = event.target.result;
+				DATABASE_TABLES.forEach(table => {
+					const store = db.createObjectStore(table.name, {keyPath: 'id'});
+					table.fields.forEach(field => {
+						store.createIndex(field, field, {unique: false});
+					});
 				});
-			});
-		};
+			};
+		}
 
 		return () => {
 			if (appDB) {

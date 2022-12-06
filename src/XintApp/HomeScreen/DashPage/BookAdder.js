@@ -11,7 +11,8 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 		paths: [],
 		opfPath: null,
 		opfDoc: null,
-		meta: {}
+		meta: {},
+		details: {},
 	});
 
 	const meta = data.meta;
@@ -26,7 +27,7 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 
 	function addBookAndGoBack () {
 		if (data.zip) {
-			addBookToLS(data.meta, currentFile);
+			addBookToLS(data, currentFile);
 		}
 		clearCurrentFile();
 		hideBookAdder(false);

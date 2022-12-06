@@ -6,8 +6,8 @@ import {getXmlDocument} from './xmlutils';
 
 
 
-export async function getSpineItemDocsFromZip (zip, meta) {
-	const spineItems = await Promise.all(meta.spineItems.map(async chapter => {
+export async function getSpineItemDocsFromZip (zip, details) {
+	const spineItems = await Promise.all(details.spineItems.map(async chapter => {
 		const xmlText = await zip.file(chapter.fullpath).async('string');
 		const xmlDoc = getXmlDocument(xmlText);
 		return {xmlDoc, ...chapter};
@@ -114,15 +114,17 @@ export async function getEbookData (firstFile) {
 
 	const meta = {
 		basepath, coverId, coverPath,
-		manifestItems, spineItems, tocItems,
 		identifier: getTagContent(opfDoc, "dc:identifier"),
 		title: getTagContent(opfDoc, "dc:title"),
 		author: getTagContent(opfDoc, "dc:creator"),
 		publisher: getTagContent(opfDoc, "dc:publisher"),
 		description: getTagContent(opfDoc, "description"),
 	};
+	const details = {
+		...meta, manifestItems, spineItems, tocItems,
+	};
 
-	return {zip, paths, opfPath, opfDoc, meta};
+	return {zip, paths, opfPath, opfDoc, meta, details};
 }
 
 
