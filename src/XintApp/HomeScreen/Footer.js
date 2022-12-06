@@ -1,3 +1,4 @@
+import React from 'react';
 
 
 
@@ -14,6 +15,20 @@ export default function Footer ({fullscreen, currentTabIndex, setCurrentTabIndex
 				</h5>
 			</div>
 		);
+	});
+
+	const footerKeyDown = (event) => {
+		const N = TABS.length;
+		if (event.key === "ArrowLeft") {
+			setCurrentTabIndex(x => (N + x - 1) % N);
+		} else if (event.key === "ArrowRight") {
+			setCurrentTabIndex(x => (N + x + 1) % N);
+		}
+	};
+
+	React.useEffect(() => {
+		window.addEventListener('keydown', footerKeyDown, false);
+		return () => window.removeEventListener('keydown', footerKeyDown, false);
 	});
 
 	return (

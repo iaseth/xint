@@ -1,8 +1,8 @@
 
 
 
-export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex, XINT_TABS}) {
-	const tabItems = XINT_TABS.filter(tab => !tab.hidden).map((tab, k) => {
+export default function Header ({fullscreen, currentTabIndex, setCurrentTabIndex, HOME_TABS}) {
+	const tabItems = HOME_TABS.filter(tab => !tab.hidden).map((tab, k) => {
 		const current = k === currentTabIndex;
 		let className = "rounded-t duration-300";
 		className += current ? " bg-slate-100 text-red-500" : " cursor-pointer hover:bg-red-600";
