@@ -1,59 +1,39 @@
 import React from 'react';
 
-import BookAdder from './BookAdder';
-import BookList from './BookList/BookList';
+import DashTab from './DashTab/DashTab';
+import BooksTab from './BooksTab/BooksTab';
+import ShelvesTab from './ShelvesTab/ShelvesTab';
+
 import Footer from '../Footer';
-import {Button} from '../../Utils';
 
 const DASH_TABS = [
-	{Component: "DashPage", title: "All", letter: "A"},
-	{Component: "StorePage", title: "Books", letter: "B"},
-	{Component: "OptionsPage", title: "Shelves", letter: "S"},
+	{title: "Dash", letter: "D"},
+	{title: "Books", letter: "B"},
+	{title: "Shelves", letter: "S"},
 ];
 
 
 
 export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
-	const fref = React.useRef(null);
+	const currentTab = DASH_TABS[currentTabIndex];
 
-	const [currentFile, setCurrentFile] = React.useState(null);
-	const clearCurrentFile = () => setCurrentFile(null);
-
-	const [showBookAdder, setShowBookAdder] = React.useState(false);
-	const hideBookAdder = () => setShowBookAdder(false);
-
-	const {addBookToLS, deleteBookFromLS} = crudUtils;
-
-	function handleUploadChange (event) {
-		const firstFile = event.target.files[0] || null;
-		if (firstFile && firstFile.type === "application/epub+zip") {
-			setCurrentFile(firstFile);
-			setShowBookAdder(true);
+	function getCurrentTab () {
+		switch (currentTab.title) {
+			case "Books":
+				return <BooksTab />;
+			case "Shelves":
+				return <ShelvesTab />;
+			case "Dash":
+			default:
+				return <DashTab {...{books, openReader, crudUtils}} />;
 		}
 	}
 
 	return (
 		<div className="bg-slate-100">
-
-			<main className="min-h-screen">
-				<BookList {...{books, openReader, deleteBookFromLS}} />
-			</main>
-
-			<footer className="bg-slate-200">
-				{showBookAdder && <BookAdder {...{currentFile, clearCurrentFile, hideBookAdder, addBookToLS}} />}
-
-				{!showBookAdder && <section className="max-w-lg mx-auto px-4">
-					<header className="py-6">
-						<input ref={fref} type="file" hidden onChange={handleUploadChange} />
-						<Button onClick={() => fref.current.click()} text="Open Ebook" />
-					</header>
-				</section>}
-
-			</footer>
-
+			{getCurrentTab()}
 			<Footer {...{fullscreen, currentTabIndex, setCurrentTabIndex}} TABS={DASH_TABS} />
-
 		</div>
 	);
 }
