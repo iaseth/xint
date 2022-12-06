@@ -13,14 +13,21 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 		opfDoc: null,
 		meta: {},
 		details: {},
+		coverBlob: null
 	});
+	const [coverSrc, setCoverSrc] = React.useState(null);
 
 	const meta = data.meta;
 
 	React.useEffect(() => {
-		getEbookData(currentFile).then(ebookDeta => {
-			if (ebookDeta) {
-				setData(ebookDeta);
+		getEbookData(currentFile).then(ebookData => {
+			if (ebookData) {
+				setData(ebookData);
+				if (ebookData.coverBlob) {
+					const URL = window.URL || window.webkitURL;
+					const coverBlobURL = URL.createObjectURL(ebookData.coverBlob);
+					setCoverSrc(coverBlobURL);
+				}
 			}
 		});
 	}, []);
@@ -42,9 +49,18 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 		<section className="py-6 bg-slate-200">
 			<main className="max-w-3xl mx-auto">
 
-				<div className="max-w-lg mx-auto px-4">
+				<section className="max-w-lg mx-auto flex px-4">
+
 					<table className="w-full">
 						<tbody>
+							<tr>
+								<td>Cover</td>
+								<td>
+									<div className="w-48 h-64">
+										{coverSrc && <img src={coverSrc} className="w-full h-full" />}
+									</div>
+								</td>
+							</tr>
 							<tr>
 								<td>Title</td>
 								<td>{meta.title}</td>
@@ -60,11 +76,14 @@ export default function BookAdder ({currentFile, clearCurrentFile, hideBookAdder
 						</tbody>
 					</table>
 
+				</section>
+
+				<section className="max-w-lg mx-auto px-4">
 					<div className="pt-4">
 						<Button text="Add eBook" onClick={addBookAndGoBack} />
 						<Button text="Back" onClick={cancelAndGoBack} />
 					</div>
-				</div>
+				</section>
 
 			</main>
 		</section>
