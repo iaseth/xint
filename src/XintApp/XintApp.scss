@@ -1,48 +1,57 @@
 
-h1, h2, h3, h4, h5, h6 {
-	@apply font-bold;
-}
+.basestyles {
+	h1, h2, h3, h4, h5, h6 { @apply font-bold; }
+	.h1, .h2, .h3, .h4, .h5, .h6 { @apply font-bold; }
 
-h1 { @apply text-2xl; }
-h2 { @apply text-xl; }
-h3 { @apply text-lg; }
-h4 { @apply text-base; }
-h5 { @apply text-sm; }
-h6 { @apply text-xs; }
+	h1, .h1 { @apply text-2xl; }
+	h2, .h2 { @apply text-xl; }
+	h3, .h3 { @apply text-lg; }
+	h4, .h4 { @apply text-base; }
+	h5, .h5 { @apply text-sm; }
+	h6, .h6 { @apply text-xs; }
 
-p { @apply leading-7; }
-div { @apply leading-7; }
+	.H1, .H2, .H3, .H4, .H5, .H6 { @apply font-bold; }
+	.H1 { @apply text-8xl; }
+	.H2 { @apply text-7xl; }
+	.H3 { @apply text-6xl; }
+	.H4 { @apply text-5xl; }
+	.H5 { @apply text-4xl; }
+	.H6 { @apply text-3xl; }
 
-img {
-	@apply max-w-full mx-auto my-4;
-	max-height: 80vh;
-}
+	p { @apply leading-7; }
+	div { @apply leading-7; }
 
-.translucent {
-	background-color: rgba(0, 0, 0, 0.4);
-}
-
-table {
-	@apply font-bold text-sm text-slate-800 border-2 border-zinc-500;
-
-	tr > td, tr > th {
-		@apply px-3 text-left;
+	img {
+		@apply max-w-full mx-auto my-4;
+		max-height: 80vh;
 	}
 
-	thead tr {
-		@apply bg-zinc-500 text-white;
-		& > th {
-			@apply py-2;
-		}
+	.translucent {
+		background-color: rgba(0, 0, 0, 0.4);
 	}
 
-	tbody tr {
-		@apply bg-white hover:bg-zinc-200;
-		& > td {
-			@apply py-3 border-b border-slate-300;
+	table {
+		@apply font-bold text-sm text-slate-800 border-2 border-zinc-500;
+
+		tr > td, tr > th {
+			@apply px-3 text-left;
 		}
-		&:last-child > td {
-			@apply border-b-0;
+
+		thead tr {
+			@apply bg-zinc-500 text-white;
+			& > th {
+				@apply py-2;
+			}
+		}
+
+		tbody tr {
+			@apply bg-white hover:bg-zinc-200;
+			& > td {
+				@apply py-3 border-b border-slate-300;
+			}
+			&:last-child > td {
+				@apply border-b-0;
+			}
 		}
 	}
 }

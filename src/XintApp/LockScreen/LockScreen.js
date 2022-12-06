@@ -16,11 +16,11 @@ export default function LockScreen ({APPNAME, toggleLockScreen}) {
 	});
 
 	return (
-		<div className="h-screen w-full bg-pink-500 text-white flex flex-col">
+		<div className="basestyles h-screen w-full bg-pink-500 text-white flex flex-col">
 			<header></header>
 
 			<main className="grow flex">
-				<h1 className="m-auto text-4xl">{APPNAME}</h1>
+				<h1 className="m-auto H3">{APPNAME}</h1>
 			</main>
 
 			<footer></footer>

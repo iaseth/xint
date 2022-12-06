@@ -66,7 +66,7 @@ export default function HomeScreen ({books, openReader, toggleLockScreen, crudUt
 	}
 
 	return (
-		<div>
+		<div className="basestyles">
 			<Header {...{fullscreen, currentTabIndex, setCurrentTabIndex, HOME_TABS}} />
 			{getCurrentHomeTab()}
 		</div>
