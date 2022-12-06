@@ -10,7 +10,7 @@ export default function OptionsScreen ({
 }) {
 
 	return (
-		<section className="absolute w-full h-full top-0 z-40 flex flex-col select-none">
+		<section className="basestyles absolute w-full h-full top-0 z-40 flex flex-col select-none">
 			<OptionsHeader {...{goToPreviousChapter, goBackHome, goToNextChapter}} />
 
 			<main className="grow translucent" onClick={toggleOptions}></main>

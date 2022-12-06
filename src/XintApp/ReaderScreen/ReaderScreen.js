@@ -185,7 +185,7 @@ export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
 						goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
 
-				<footer>
+				<footer className="basestyles">
 					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ left: showToc ? "0" : "-100%" }}>
 						<TocView {...{tocItems, currentSpineId, setCurrentSpineId, toggleToc}} />
 					</aside>
