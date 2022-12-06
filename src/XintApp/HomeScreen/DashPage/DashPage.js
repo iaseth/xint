@@ -16,10 +16,10 @@ const DASH_TABS = [
 
 export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
 	const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
-	const currentTab = DASH_TABS[currentTabIndex];
+	const currentDashTab = DASH_TABS[currentTabIndex];
 
-	function getCurrentTab () {
-		switch (currentTab.title) {
+	function getCurrentDashTab () {
+		switch (currentDashTab.title) {
 			case "Books":
 				return <BooksTab />;
 			case "Shelves":
@@ -32,7 +32,7 @@ export default function DashPage ({fullscreen, books, openReader, crudUtils}) {
 
 	return (
 		<div className="bg-slate-100">
-			{getCurrentTab()}
+			{getCurrentDashTab()}
 			<Footer {...{fullscreen, currentTabIndex, setCurrentTabIndex}} TABS={DASH_TABS} />
 		</div>
 	);
