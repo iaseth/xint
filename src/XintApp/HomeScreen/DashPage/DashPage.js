@@ -6,9 +6,9 @@ import Footer from '../Footer';
 import {Button} from '../../Utils';
 
 const DASH_TABS = [
-	{Component: "DashPage", title: "Dash", letter: "D"},
-	{Component: "StorePage", title: "Store", letter: "S"},
-	{Component: "OptionsPage", title: "Options", letter: "O"},
+	{Component: "DashPage", title: "All", letter: "A"},
+	{Component: "StorePage", title: "Books", letter: "B"},
+	{Component: "OptionsPage", title: "Shelves", letter: "S"},
 ];
 
 

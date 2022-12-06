@@ -3,9 +3,9 @@ import React from 'react';
 import Footer from '../Footer';
 
 const STORE_TABS = [
-	{Component: "DashPage", title: "S1", letter: "D"},
-	{Component: "StorePage", title: "S2", letter: "S"},
-	{Component: "OptionsPage", title: "S3", letter: "O"},
+	{Component: "DashPage", title: "Store", letter: "S"},
+	{Component: "StorePage", title: "Import", letter: "I"},
+	{Component: "OptionsPage", title: "Export", letter: "E"},
 ];
 
 
