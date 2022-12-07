@@ -13,8 +13,7 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 
 export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
-	// eslint-disable-next-line
-	const {bookId, meta} = currentBook;
+	const {meta} = currentBook;
 	const {tocItems} = details;
 
 	const [showToc, setShowToc] = React.useState(false);
@@ -137,7 +136,7 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 		}
 	};
 
-	function handleKeyDown (event) {
+	function handleReaderKeyDown (event) {
 		const {key} = event;
 		switch (key) {
 			case "ArrowLeft":
@@ -157,14 +156,9 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 	}
 
 	React.useEffect(() => {
-		window.addEventListener('keydown', handleKeyDown, false);
-		return () => window.removeEventListener('keydown', handleKeyDown, false);
+		window.addEventListener('keydown', handleReaderKeyDown, false);
+		return () => window.removeEventListener('keydown', handleReaderKeyDown, false);
 	});
-
-
-	if (currentDoc === null) {
-		return <LoadingPage />;
-	}
 
 	return (
 		<article>
@@ -173,7 +167,7 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 				<main ref={readerRef} className="bg-white h-full w-full max-w-lg mx-auto overflow-hidden relative">
 
 					<section ref={pageViewRef} className="relative duration-300" style={containerStyle}>
-						<PageView {...{currentDoc}} />
+						{currentDoc ? <PageView {...{currentDoc}} /> : <LoadingPage {...{meta}} />}
 					</section>
 
 					{showOptions && <OptionsScreen {...{goToPreviousChapter, goBackHome, goToNextChapter, toggleOptions,
