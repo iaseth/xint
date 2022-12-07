@@ -35,8 +35,16 @@ export default function XintApp () {
 	const {books, bookshelves, options} = appdata;
 	const [currentBookIndex, setCurrentBookIndex] = React.useState(-1);
 	const currentBook = books[currentBookIndex] || null;
-	const openReader = (bookIndex) => setCurrentBookIndex(bookIndex);
-	const goBackHome = () => setCurrentBookIndex(-1);
+	const [readerScreen, setReaderScreen] = React.useState(false);
+
+	const openReader = (bookIndex) => {
+		setCurrentBookIndex(bookIndex);
+		setReaderScreen(true);
+	};
+	const goBackHome = () => {
+		setCurrentBookIndex(-1);
+		setReaderScreen(false);
+	};
 
 	const getOption = (k) => options[k] || null;
 	const setOption = (k, v) => {
@@ -98,7 +106,7 @@ export default function XintApp () {
 		return <SplashScreen {...{APPNAME}} />;
 	} else if (lockScreen) {
 		return <LockScreen {...{APPNAME, toggleLockScreen}} />;
-	} else if (currentBook) {
+	} else if (readerScreen && currentBook) {
 		return <ReaderScreen {...{appDB, currentBook, goBackHome}} />;
 	} else {
 		return <HomeScreen {...{books, getImageFromDB, openReader, toggleLockScreen, crudUtils}} />;
