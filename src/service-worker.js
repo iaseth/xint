@@ -15,7 +15,7 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 
 // updating this triggers PWA update
 // update this only on major and minor releases
-export const APP_VERSION = 0.1;
+export const APP_VERSION = 0.2;
 
 clientsClaim();
 
