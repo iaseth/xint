@@ -1,6 +1,5 @@
 import React from 'react';
 import path from 'path-browserify';
-import JSZip from 'jszip';
 
 import {TocView, SpineView, ToolboxView} from './TopScreens';
 
@@ -13,12 +12,9 @@ import {getSpineItemDocsFromZip} from '../Utils';
 
 
 
-export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
+export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
+	// eslint-disable-next-line
 	const {bookId, meta} = currentBook;
-	const [zip, setZip] = React.useState(null);
-	const [details, setDetails] = React.useState({
-		tocItems: []
-	});
 	const {tocItems} = details;
 
 	const [showToc, setShowToc] = React.useState(false);
@@ -63,26 +59,11 @@ export default function ReaderScreen ({appDB, currentBook, goBackHome}) {
 
 
 	React.useEffect(() => {
-		// gets zip from database
-		const tx = appDB.transaction(['books', 'epubs'], 'readonly');
-		const reqBook = tx.objectStore('books').get(bookId);
-		const reqEpub = tx.objectStore('epubs').get(bookId);
-		tx.oncomplete = () => {
-			const bookResult = reqBook.result;
-			const epubResult = reqEpub.result;
-			const {details} = bookResult;
-			const zip = new JSZip();
-
-			zip.loadAsync(epubResult.file).then(zip => {
-				setZip(zip);
-				setDetails(details);
-				getSpineItemDocsFromZip(zip, details).then(spineItems => {
-					setSpineItems(spineItems);
-					// start from the first item in spine
-					setCurrentSpineId(spineItems[0].id);
-				});
-			});
-		};
+		getSpineItemDocsFromZip(zip, details).then(spineItems => {
+			setSpineItems(spineItems);
+			// start from the first item in spine
+			setCurrentSpineId(spineItems[0].id);
+		});
 	}, []);
 
 	React.useEffect(() => {

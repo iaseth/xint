@@ -1,4 +1,5 @@
 import React from 'react';
+import JSZip from 'jszip';
 
 import './XintApp.scss';
 
@@ -37,9 +38,33 @@ export default function XintApp () {
 	const currentBook = books[currentBookIndex] || null;
 	const [readerScreen, setReaderScreen] = React.useState(false);
 
+	// for the current book
+	const [zip, setZip] = React.useState(null);
+	const [details, setDetails] = React.useState({
+		tocItems: []
+	});
+
 	const openReader = (bookIndex) => {
-		setCurrentBookIndex(bookIndex);
-		setReaderScreen(true);
+		const book = books[bookIndex];
+		const {bookId, meta} = book;
+
+		// gets zip from database
+		const tx = appDB.transaction(['books', 'epubs'], 'readonly');
+		const reqBook = tx.objectStore('books').get(bookId);
+		const reqEpub = tx.objectStore('epubs').get(bookId);
+		tx.oncomplete = () => {
+			const bookResult = reqBook.result;
+			const epubResult = reqEpub.result;
+			const {details} = bookResult;
+			const zip = new JSZip();
+
+			zip.loadAsync(epubResult.file).then(zip => {
+				setZip(zip);
+				setDetails(details);
+				setCurrentBookIndex(bookIndex);
+				setReaderScreen(true);
+			});
+		};
 	};
 	const goBackHome = () => {
 		setCurrentBookIndex(-1);
@@ -107,7 +132,7 @@ export default function XintApp () {
 	} else if (lockScreen) {
 		return <LockScreen {...{APPNAME, toggleLockScreen}} />;
 	} else if (readerScreen && currentBook) {
-		return <ReaderScreen {...{appDB, currentBook, goBackHome}} />;
+		return <ReaderScreen {...{currentBook, zip, details, goBackHome}} />;
 	} else {
 		return <HomeScreen {...{books, getImageFromDB, openReader, toggleLockScreen, crudUtils}} />;
 	}
