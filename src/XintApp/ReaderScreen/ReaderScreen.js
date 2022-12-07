@@ -1,6 +1,7 @@
 import React from 'react';
 import path from 'path-browserify';
 
+import './ReaderScreen.scss';
 import TopScreens from './TopScreens/TopScreens';
 
 import LoadingPage from './LoadingPage/LoadingPage';
@@ -166,9 +167,10 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 
 				<main ref={readerRef} className="bg-white h-full w-full max-w-lg mx-auto overflow-hidden relative">
 
-					<section ref={pageViewRef} className="relative duration-300" style={containerStyle}>
-						{currentDoc ? <PageView {...{currentDoc}} /> : <LoadingPage {...{meta}} />}
-					</section>
+					{!currentDoc && <LoadingPage {...{meta}} />}
+					{currentDoc  && <section ref={pageViewRef} className="relative duration-300 readerstyles" style={containerStyle}>
+						<PageView {...{currentDoc}} />
+					</section>}
 
 					{showOptions && <OptionsScreen {...{goToPreviousChapter, goBackHome, goToNextChapter, toggleOptions,
 						pageViewRef, pageNumber, setPageNumber,

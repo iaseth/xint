@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap');
+
+.readerstyles {
+	font-family: 'EB Garamond', serif;
+	@apply text-slate-900;
+
+	h1, h2, h3, h4, h5, h6 { @apply font-bold; }
+
+	h1, .h1 { @apply text-2xl; }
+	h2, .h2 { @apply text-xl; }
+	h3, .h3 { @apply text-lg; }
+	h4, .h4 { @apply text-base; }
+	h5, .h5 { @apply text-sm; }
+	h6, .h6 { @apply text-xs; }
+
+	p, div {
+		@apply leading-8;
+	}
+	img {
+		@apply block mx-auto;
+		max-height: 90vh;
+	}
+}

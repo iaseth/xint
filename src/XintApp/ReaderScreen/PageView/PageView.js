@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 function getContentHtml (xmlDoc) {
 	if (xmlDoc) {
-		const body = xmlDoc.getElementsByTagName('body')[0];
+		const body = xmlDoc.body;
 		if (body) {
 			return _.unescape(body.innerHTML);
 		}
