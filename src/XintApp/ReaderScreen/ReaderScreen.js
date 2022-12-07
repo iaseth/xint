@@ -1,7 +1,7 @@
 import React from 'react';
 import path from 'path-browserify';
 
-import {TocView, SpineView, ToolboxView} from './TopScreens';
+import TopScreens from './TopScreens/TopScreens';
 
 import LoadingPage from './LoadingPage/LoadingPage';
 import PageView from './PageView/PageView';
@@ -100,6 +100,17 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 	}, [currentSpineId]);
 
 
+	const readerRef = React.useRef(null);
+	const [dimensions, setDimensions] = React.useState({height: 0, width: 0});
+	const updateDimensions = () => {
+		if (readerRef.current) {
+			setDimensions({
+				height: readerRef.current.offsetHeight,
+				width: readerRef.current.offsetWidth,
+			});
+		}
+	};
+
 	const pageViewRef = React.useRef(null);
 	const [pageNumber, setPageNumber] = React.useState(0);
 	const containerStyle = {
@@ -159,7 +170,7 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 		<article>
 			<main className="bg-slate-200 h-screen overflow-hidden ch:h-full">
 
-				<main className="bg-white h-full w-full max-w-lg mx-auto overflow-hidden relative">
+				<main ref={readerRef} className="bg-white h-full w-full max-w-lg mx-auto overflow-hidden relative">
 
 					<section ref={pageViewRef} className="relative duration-300" style={containerStyle}>
 						<PageView {...{currentDoc}} />
@@ -173,19 +184,10 @@ export default function ReaderScreen ({currentBook, zip, details, goBackHome}) {
 						goToPreviousPage, goToNextPage, goToPreviousChapter, goToNextChapter}} />
 				</main>
 
-				<footer className="basestyles">
-					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ left: showToc ? "0" : "-100%" }}>
-						<TocView {...{tocItems, currentSpineId, setCurrentSpineId, toggleToc}} />
-					</aside>
+				<TopScreens {...{showToc, showToolbox, showSpine,
+					toggleToc, toggleToolbox, toggleSpine,
+					tocItems, spineItems, currentSpineId, setCurrentSpineId}} />
 
-					<aside className="fixed left-0 w-full h-full z-40" style={{ top: showToolbox ? "0" : "100%" }}>
-						<ToolboxView {...{toggleToolbox}} />
-					</aside>
-
-					<aside className="fixed top-0 w-full h-full z-40 duration-300" style={{ right: showSpine ? "0" : "-100%" }}>
-						<SpineView {...{spineItems, currentSpineId, setCurrentSpineId, toggleSpine}} />
-					</aside>
-				</footer>
 			</main>
 		</article>
 	);

@@ -9,7 +9,8 @@ export default function SpineView ({spineItems, currentSpineId, setCurrentSpineI
 
 		return (
 			<h5 key={k} className={className} onClick={() => setCurrentSpineId(item.id)}>
-				<span className="grow">{item.id}</span>
+				<span className="bg-zinc-600 text-white px-1 rounded">{k+1}</span>
+				<span className="grow px-2">{item.id}</span>
 				<span>{Math.round(item.size/1024)} k</span>
 			</h5>
 		);
@@ -18,7 +19,7 @@ export default function SpineView ({spineItems, currentSpineId, setCurrentSpineI
 	return (
 		<section className="h-full w-full flex">
 			<div className="grow translucent" onClick={toggleSpine}></div>
-			<div className="grow h-full max-w-sm bg-white border-l-2 border-slate-300 overflow-y-scroll">
+			<div className="grow h-full max-w-md bg-white border-l-2 border-slate-300 overflow-y-scroll">
 				<div>{items}</div>
 			</div>
 		</section>
